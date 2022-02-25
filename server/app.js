@@ -5,6 +5,10 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const app = express();
 const mongoose = require("mongoose");
+const cors = require("cors");
+const favoritesRouter = require("./routes/favorites");
+const notesRouter = require("./routes/notes");
+const ratingsRouter = require("./routes/ratings");
 mongoose
   .connect(
     `mongodb+srv://admin:${process.env.PASSWORD}@movie-app-api.eq8yx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
@@ -16,6 +20,10 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use("*", cors());
+app.use("/favorites", favoritesRouter);
+app.use("/ratings", ratingsRouter);
+app.use("/notes", notesRouter);
 app.use(express.static(path.join(__dirname, "public")));
 
 module.exports = app;
