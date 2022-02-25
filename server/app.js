@@ -1,18 +1,16 @@
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
-
-var app = express();
-
-// mongoose
-//   .connect(
-//     `mongodb+srv://admin:${process.env.PASSWORD}@movie-app-api.eq8yx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
-//   )
-//   .then(console.log("connected to DB"))
-//   .catch((err) => {
-//     console.log(err);
-//   });
+require("dotenv").config();
+const express = require("express");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+const logger = require("morgan");
+const app = express();
+const mongoose = require("mongoose");
+mongoose
+  .connect(
+    `mongodb+srv://admin:${process.env.PASSWORD}@movie-app-api.eq8yx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+  )
+  .then(console.log("connected to DB"))
+  .catch((err) => {});
 
 app.use(logger("dev"));
 app.use(express.json());
