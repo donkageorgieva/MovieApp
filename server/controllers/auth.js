@@ -34,4 +34,32 @@ exports.signup = (req, res) => {
       throw err;
     });
 };
-exports.login = (req, res) => {};
+exports.login = (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  console.log(username);
+  User.findOne({ username: username })
+    .then((user) => {
+      if (!user) {
+        const err = new Error("User not found");
+        err.statusCode = 404;
+        throw err;
+      }
+      return bcrypt.compare(password, user.password);
+    })
+    .then((isAuth) => {
+      if (!isAuth) {
+        const err = new Error("Invalid password");
+        err.statusCode = 401;
+        throw err;
+      }
+
+      res.status(200).json({
+        message: "Logged in",
+      });
+    })
+    .catch((err) => {
+      err.statusCode = 401;
+      throw err;
+    });
+};
