@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const authControllers = require("../controllers/auth");
-const User = require("../models/user");
-const demo = require("../middleware/demouser");
+const Account = require("../models/account");
+const demo = require("../middleware/demo");
 const { body } = require("express-validator");
 router.post(
   "/signup",
@@ -13,7 +13,7 @@ router.post(
       .withMessage("Please enter a valid email")
       .normalizeEmail()
       .custom((value, { req }) => {
-        return User.findOne({ email: value })
+        return Account.findOne({ email: value })
           .then((userInDB) => {
             if (userInDB) {
               return Promise.reject("E-mail address already exists");
@@ -29,7 +29,7 @@ router.post(
       .isString()
       .trim()
       .custom((value, { req }) => {
-        return User.findOne({ username: value })
+        return Account.findOne({ username: value })
           .then((userInDB) => {
             if (userInDB) {
               return Promise.reject("Username already exists");
@@ -42,5 +42,5 @@ router.post(
   ],
   authControllers.signup
 );
-router.get("/login", demo.demoUser, authControllers.login);
+router.post("/login", demo.demoAccount, authControllers.login);
 module.exports = router;

@@ -1,13 +1,15 @@
 const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
+const Account = require("../models/account");
+const mongoose = require("mongoose");
 const User = require("../models/user");
 exports.signup = (req, res) => {
-  console.log("signing up");
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    const error = new Error("Validation failed");
+    const error = new Error("Validation failed!!!!");
     error.statusCode = 422;
     error.data = errors.array();
+
     throw error;
   }
   const username = req.body.username;
@@ -17,12 +19,20 @@ exports.signup = (req, res) => {
   bcrypt
     .hash(password, salt)
     .then((hashedPassword) => {
+      const accountUsers = [];
       const user = new User({
+        name: username,
+      });
+      user.save();
+      accountUsers.push(user._id);
+      const account = new Account({
         username,
         password: hashedPassword,
         email,
+        users: accountUsers,
       });
-      return user.save();
+
+      return account.save();
     })
     .then((result) => {
       res.status(201).json({ message: "New user created", userId: result._id });
@@ -38,14 +48,18 @@ exports.signup = (req, res) => {
 exports.login = (req, res) => {
   const username = req.user.username;
   const password = req.user.password;
-  User.findOne({ username: username })
+  const userId = req.user.userId;
+  Account.findById(userId)
     .then((user) => {
-      if (!user) {
+      console.log(user, username, "names");
+      if (!user || user.username.trim() !== username.trim()) {
         const err = new Error("User not found");
         err.statusCode = 404;
         throw err;
       }
+
       const isAuth = bcrypt.compare(password, user.password);
+
       return {
         isAuth,
         userId: user._id,

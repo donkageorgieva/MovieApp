@@ -1,23 +1,18 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const Favorite = require("../models/favorites");
+
 const UserSchema = new Schema({
-  username: {
+  name: {
     type: String,
     required: true,
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-  },
-  favorites: {
-    type: Schema.Types.ObjectId,
-    ref: "Favorite",
-  },
+  favorites: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Favorite",
+      required: true,
+    },
+  ],
 });
 
 const User = mongoose.model("User", UserSchema);

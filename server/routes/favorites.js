@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const favoritesController = require("../controllers/favorites");
+
 router.get("/", (req, res) => {
-  res.send("Get movies");
+  console.log(req.user, "user");
+  res.send(`Get movies for `);
 });
 
 router.get("/:movieId", (req, res) => {
