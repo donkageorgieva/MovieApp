@@ -46,23 +46,24 @@ exports.signup = (req, res) => {
     });
 };
 exports.login = (req, res) => {
-  const username = req.user.username;
-  const password = req.user.password;
-  const userId = req.user.userId;
-  Account.findById(userId)
-    .then((user) => {
-      console.log(user, username, "names");
-      if (!user || user.username.trim() !== username.trim()) {
+  const accountname = req.account.username;
+  const password = req.account.password;
+  const accountId = req.account.accountId;
+  console.log(accountId, "id");
+  Account.findById(accountId)
+    .then((account) => {
+      console.log(account, accountname, "names");
+      if (!account || account.username.trim() !== accountname.trim()) {
         const err = new Error("User not found");
         err.statusCode = 404;
         throw err;
       }
 
-      const isAuth = bcrypt.compare(password, user.password);
+      const isAuth = bcrypt.compare(password, account.password);
 
       return {
         isAuth,
-        userId: user._id,
+        userId: account._id,
       };
     })
     .then((authInfo) => {
@@ -74,7 +75,7 @@ exports.login = (req, res) => {
 
       res.status(200).json({
         message: "Logged in",
-        userId: authInfo.userId,
+        accountId: authInfo.userId,
       });
     })
     .catch((err) => {

@@ -1,1 +1,3 @@
-exports.addFavorite = (req, res) => {};
+exports.addFavorite = (req, res) => {
+  console.log(req.user);
+};
