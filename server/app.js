@@ -27,7 +27,12 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use("*", cors());
+app.use(
+  cors({
+    origin: "*",
+    allowedHeaders: ["Authorization, Content-Type"],
+  })
+);
 
 app.use("/auth", authRouter);
 app.use("/favorites", favoritesRouter);

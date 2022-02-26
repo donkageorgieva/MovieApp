@@ -1,8 +1,9 @@
 const { validationResult } = require("express-validator");
+const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const Account = require("../models/account");
-const mongoose = require("mongoose");
 const User = require("../models/user");
+const jwt = require("jsonwebtoken");
 exports.signup = (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -72,10 +73,17 @@ exports.login = (req, res) => {
         err.statusCode = 401;
         throw err;
       }
-
+      const token = jwt.sign(
+        {
+          accountId: authInfo.userId,
+        },
+        process.env.SECRET,
+        { expiresIn: "30d" }
+      );
       res.status(200).json({
         message: "Logged in",
         accountId: authInfo.userId,
+        token,
       });
     })
     .catch((err) => {
