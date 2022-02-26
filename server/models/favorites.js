@@ -17,5 +17,11 @@ const FavSchema = new Schema({
   },
 });
 
+FavSchema.methods.addMovie = function (movieId, user) {
+  const updatedFavorites = [...this.favorites];
+  updatedFavorites.push(movieId);
+  this.favorites = updatedFavorites;
+  return this.save();
+};
 const Favorite = mongoose.model("Favorite", FavSchema);
 module.exports = Favorite;

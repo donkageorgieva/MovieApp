@@ -2,6 +2,7 @@ const { validationResult } = require("express-validator");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 exports.signup = (req, res) => {
+  console.log("signing up");
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const error = new Error("Validation failed");
@@ -35,9 +36,8 @@ exports.signup = (req, res) => {
     });
 };
 exports.login = (req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
-  console.log(username);
+  const username = req.user.username;
+  const password = req.user.password;
   User.findOne({ username: username })
     .then((user) => {
       if (!user) {
@@ -45,10 +45,14 @@ exports.login = (req, res) => {
         err.statusCode = 404;
         throw err;
       }
-      return bcrypt.compare(password, user.password);
+      const isAuth = bcrypt.compare(password, user.password);
+      return {
+        isAuth,
+        userId: user._id,
+      };
     })
-    .then((isAuth) => {
-      if (!isAuth) {
+    .then((authInfo) => {
+      if (!authInfo.isAuth) {
         const err = new Error("Invalid password");
         err.statusCode = 401;
         throw err;
@@ -56,6 +60,7 @@ exports.login = (req, res) => {
 
       res.status(200).json({
         message: "Logged in",
+        userId: authInfo.userId,
       });
     })
     .catch((err) => {

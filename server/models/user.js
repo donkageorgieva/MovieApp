@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
+const Favorite = require("../models/favorites");
 const UserSchema = new Schema({
   username: {
     type: String,
@@ -12,6 +13,10 @@ const UserSchema = new Schema({
   email: {
     type: String,
     required: true,
+  },
+  favorites: {
+    type: Schema.Types.ObjectId,
+    ref: "Favorite",
   },
 });
 
