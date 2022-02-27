@@ -1,5 +1,4 @@
 const { validationResult } = require("express-validator");
-const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const Account = require("../models/account");
 const User = require("../models/user");
@@ -36,7 +35,7 @@ exports.signup = (req, res) => {
       return account.save();
     })
     .then((result) => {
-      res.status(201).json({ message: "New user created", userId: result._id });
+      res.status(201).json({ message: "Account created", userId: result._id });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -50,10 +49,8 @@ exports.login = (req, res) => {
   const accountname = req.account.username;
   const password = req.account.password;
   const accountId = req.account.accountId;
-  console.log(accountId, "id");
   Account.findById(accountId)
     .then((account) => {
-      console.log(account, accountname, "names");
       if (!account || account.username.trim() !== accountname.trim()) {
         const err = new Error("User not found");
         err.statusCode = 404;

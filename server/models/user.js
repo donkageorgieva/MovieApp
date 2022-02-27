@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Favorite = require("./favorite");
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({

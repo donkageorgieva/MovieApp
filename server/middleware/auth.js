@@ -1,8 +1,12 @@
 const Account = require("../models/account");
 const jwt = require("jsonwebtoken");
 exports.accAuth = (req, res, next) => {
+  if (!req.get("Authorization")) {
+    const error = new Error("Authorization  is required");
+    error.statusCode = 401;
+    throw error;
+  }
   const token = req.get("Authorization").split(" ")[1];
-
   let decodedToken;
   try {
     decodedToken = jwt.verify(token, process.env.SECRET);
@@ -16,6 +20,11 @@ exports.accAuth = (req, res, next) => {
     throw err;
   }
 
+  req.accountId = decodedToken.accountId.toString();
+
+  next();
+};
+exports.demoAcc = (req, res, next) => {
   if (!req.body.accountId && req.body.demo) {
     Account.findById("621a217f1e027a1dde165b4b")
       .then((account) => {
