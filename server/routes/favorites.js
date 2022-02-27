@@ -5,8 +5,6 @@ const favoritesController = require("../controllers/favorites");
 router.get("/:movieId", favoritesController.getOneFavorite);
 router.get("/", favoritesController.getFavorites);
 router.post("/", favoritesController.addFavorite);
-router.delete("/", (req, res) => {
-  res.send("Delete movie");
-});
-
+router.delete("/:movieId", favoritesController.deleteOneFavorite);
+router.delete("/");
 module.exports = router;

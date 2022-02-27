@@ -4,22 +4,51 @@ const mongoose = require("mongoose");
 exports.addFavorite = (req, res) => {
   Account.findById(req.accountId)
     .then((acc) => {
-      acc.addFavorite(req.body.userId, {
-        movieId: req.body.movieId,
-        name: req.body.movieName,
-        genres: [...req.body.genres],
-      });
+      if (!acc) {
+        const err = new Error("Account not found");
+        err.statusCode = 404;
+        throw err;
+      }
+      acc
+        .populate({
+          path: "users",
+          match: {
+            _id: req.body.userId,
+          },
+        })
+        .then((populatedUser) => {
+          populatedUser.users[0].addFavorite({
+            name: req.body.movieName,
+            movieId: req.body.movieId,
+            genres: [...req.body.genres],
+          });
+        })
+        .catch((err) => {
+          if (!err.statusCode) {
+            err.statusCode = 500;
+          }
+          throw err;
+        });
     })
+
     .catch((err) => {
-      err.statusCode = 404;
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
       throw err;
     });
+  res.sendStatus(200);
 };
 
 exports.getOneFavorite = (req, res) => {
   let favorite;
   Account.findById(req.accountId)
     .then((acc) => {
+      if (!acc) {
+        const err = new Error("Account not found");
+        err.statusCode = 404;
+        throw err;
+      }
       acc
         .populate({
           path: "users",
@@ -47,7 +76,9 @@ exports.getOneFavorite = (req, res) => {
         });
     })
     .catch((err) => {
-      err.statusCode = 404;
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
       throw err;
     });
 };
@@ -55,6 +86,11 @@ exports.getFavorites = (req, res) => {
   let favorites;
   Account.findById(req.accountId)
     .then((acc) => {
+      if (!acc) {
+        const err = new Error("Account not found");
+        err.statusCode = 404;
+        throw err;
+      }
       acc
         .populate({
           path: "users",
@@ -70,7 +106,43 @@ exports.getFavorites = (req, res) => {
         });
     })
     .catch((err) => {
-      err.statusCode = 404;
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
       throw err;
     });
+};
+exports.deleteOneFavorite = (req, res) => {
+  Account.findById(req.accountId)
+    .then((acc) => {
+      if (!acc) {
+        const err = new Error("Account not found");
+        err.statusCode = 404;
+        throw err;
+      }
+      acc
+        .populate({
+          path: "users",
+          match: {
+            _id: req.body.userId,
+          },
+        })
+        .then((populatedUser) => {
+          populatedUser.users[0].deleteOneFavorite(req.params.movieId);
+        })
+        .catch((err) => {
+          if (!err.statusCode) {
+            err.statusCode = 500;
+          }
+          throw err;
+        });
+    })
+
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      throw err;
+    });
+  res.sendStatus(200);
 };
