@@ -19,7 +19,7 @@ exports.accAuth = (req, res, next) => {
     err.statusCode = 401;
     throw err;
   }
-
+  console.log(decodedToken.accountId, "decoded token");
   req.accountId = decodedToken.accountId.toString();
 
   next();

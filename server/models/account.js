@@ -24,7 +24,7 @@ const AccountSchema = new Schema({
   ],
 });
 
-AccountSchema.methods.getUser = function (userId, movie) {
+AccountSchema.methods.addFavorite = function (userId, movie) {
   this.populate({
     path: "users",
     match: {
@@ -64,5 +64,6 @@ AccountSchema.methods.getUser = function (userId, movie) {
     });
   return this.save();
 };
+
 const Account = mongoose.model("Account", AccountSchema);
 module.exports = Account;

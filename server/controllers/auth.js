@@ -1,5 +1,5 @@
 const { validationResult } = require("express-validator");
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const Account = require("../models/account");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
@@ -49,6 +49,7 @@ exports.login = (req, res) => {
   const accountname = req.account.username;
   const password = req.account.password;
   const accountId = req.account.accountId;
+  let userId;
   Account.findById(accountId)
     .then((account) => {
       if (!account || account.username.trim() !== accountname.trim()) {
@@ -56,23 +57,19 @@ exports.login = (req, res) => {
         err.statusCode = 404;
         throw err;
       }
-
-      const isAuth = bcrypt.compare(password, account.password);
-
-      return {
-        isAuth,
-        userId: account._id,
-      };
+      userId = account._id;
+      return bcrypt.compare(password.trim(), account.password.trim());
     })
     .then((authInfo) => {
-      if (!authInfo.isAuth) {
+      console.log(authInfo);
+      if (!authInfo) {
         const err = new Error("Invalid password");
         err.statusCode = 401;
         throw err;
       }
       const token = jwt.sign(
         {
-          accountId: authInfo.userId,
+          accountId: userId,
         },
         process.env.SECRET,
         { expiresIn: "30d" }
