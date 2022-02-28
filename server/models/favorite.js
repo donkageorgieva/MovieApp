@@ -22,6 +22,11 @@ const FavoriteSchema = new Schema({
       ref: "Note",
     },
   ],
+  rating: {
+    type: Number,
+    min: 0,
+    max: 5,
+  },
 });
 
 FavoriteSchema.methods.addNote = function (comment) {
@@ -35,5 +40,18 @@ FavoriteSchema.methods.addNote = function (comment) {
   this.notes = currNotes;
   return this.save();
 };
+FavoriteSchema.methods.addRating = function (amount) {
+  if (!this.rating) {
+    this.rating = amount;
+    return this.save();
+  }
+  this.rating += amount;
+  return this.save();
+};
+FavoriteSchema.methods.removeRating = function (amount) {
+  this.rating -= amount;
+  return this.save();
+};
+FavoriteSchema.methods.removeRating = function (rating) {};
 const Favorite = mongoose.model("Favorite", FavoriteSchema);
 module.exports = Favorite;

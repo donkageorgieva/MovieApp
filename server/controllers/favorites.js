@@ -181,3 +181,56 @@ exports.getNotes = (req, res) => {
       throw err;
     });
 };
+exports.addRating = (req, res) => {
+  console.log("adding rating");
+  User.findById(req.userId)
+    .then((user) => {
+      if (!user) {
+        const err = new Error("user not found");
+        err.statusCode = 404;
+        throw err;
+      }
+
+      user
+        .populate({
+          path: "favorites",
+
+          match: {
+            movieId: req.params.movieId,
+          },
+        })
+        .then((populatedUser) => {
+          populatedUser.favorites[0].addRating(req.body.amount);
+        });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      throw err;
+    });
+};
+exports.getRatings = (req, res) => {
+  console.log("getting ratings");
+  User.findById(req.userId)
+    .then((user) => {
+      if (!user) {
+        const err = new Error("user not found");
+        err.statusCode = 404;
+        throw err;
+      }
+
+      user.populate("favorites").then((populatedUser) => {
+        res.send({
+          movie: populatedUser.favorites[0].movieId,
+          rating: populatedUser.favorites[0].rating,
+        });
+      });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      throw err;
+    });
+};
