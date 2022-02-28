@@ -1,23 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
-
+import { useState } from "react";
+import useHttp from "./hooks/httphook";
+import "./App.css";
+import { useDispatch, useSelector } from "react-redux";
+import { userActions } from "./store/user/user";
+import { Container } from "@mui/material";
+import Header from "./components/header/Header";
 function App() {
+  const { sendRequest, result } = useHttp();
+  const dispatch = useDispatch();
+  const userToken = useSelector((state) => state.user.token);
+  useState(() => {
+    sendRequest({
+      url: "http://localhost:8080/auth/login",
+      method: "POST",
+      body: {
+        username: "",
+        password: "",
+        demo: true,
+      },
+      fn: (response) => {
+        dispatch(
+          userActions.login({
+            token: response.token,
+          })
+        );
+        localStorage.setItem("token", JSON.stringify(userToken));
+      },
+    });
+  }, [sendRequest]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Header />
+      <Container maxWidth="lg"></Container>
     </div>
   );
 }
