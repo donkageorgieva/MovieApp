@@ -41,17 +41,9 @@ FavoriteSchema.methods.addNote = function (comment) {
   return this.save();
 };
 FavoriteSchema.methods.addRating = function (amount) {
-  if (!this.rating) {
-    this.rating = amount;
-    return this.save();
-  }
-  this.rating += amount;
+  this.rating = amount;
   return this.save();
 };
-FavoriteSchema.methods.removeRating = function (amount) {
-  this.rating -= amount;
-  return this.save();
-};
-FavoriteSchema.methods.removeRating = function (rating) {};
+
 const Favorite = mongoose.model("Favorite", FavoriteSchema);
 module.exports = Favorite;

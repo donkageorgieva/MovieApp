@@ -35,7 +35,6 @@ exports.addFavorite = (req, res) => {
 };
 
 exports.getOneFavorite = (req, res) => {
-  let favorite;
   User.findById(req.userId)
     .then((user) => {
       if (!user) {
@@ -57,7 +56,7 @@ exports.getOneFavorite = (req, res) => {
             err.statusCode = 404;
             throw err;
           }
-          favorite = populatedUser.favorites[0];
+          let favorite = populatedUser.favorites[0];
           res.send(favorite);
         });
     })
@@ -69,7 +68,6 @@ exports.getOneFavorite = (req, res) => {
     });
 };
 exports.getFavorites = (req, res) => {
-  let favorites;
   User.findById(req.userId)
     .then((user) => {
       if (!user) {
@@ -79,7 +77,7 @@ exports.getFavorites = (req, res) => {
       }
 
       user.populate("favorites").then((populatedUser) => {
-        favorites = [...populatedUser.favorites];
+        let favorites = [...populatedUser.favorites];
         res.send(favorites);
       });
     })
@@ -181,8 +179,9 @@ exports.getNotes = (req, res) => {
       throw err;
     });
 };
-exports.addRating = (req, res) => {
+exports.modifyRating = (req, res) => {
   console.log("adding rating");
+
   User.findById(req.userId)
     .then((user) => {
       if (!user) {
