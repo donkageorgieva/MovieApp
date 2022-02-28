@@ -7,7 +7,7 @@ const Header = () => {
       sx={{
         display: "flex",
         alignItems: "center",
-        height: "30rem",
+        height: "50vh",
         backgroundColor: "primary",
       }}
     >

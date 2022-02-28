@@ -1,37 +1,60 @@
-import { useState } from "react";
-import useHttp from "./hooks/httphook";
+import { useEffect } from "react";
+
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "./store/user/user";
 import { Container } from "@mui/material";
 import Header from "./components/header/Header";
+
 function App() {
-  const { sendRequest, result } = useHttp();
   const dispatch = useDispatch();
   const userToken = useSelector((state) => state.user.token);
-  useState(() => {
-    sendRequest({
-      url: "http://localhost:8080/auth/login",
+  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  useEffect(() => {
+    fetch("http://localhost:8080/auth/login", {
       method: "POST",
-      body: {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
         username: "",
         password: "",
         demo: true,
-      },
-      fn: (response) => {
-        dispatch(
-          userActions.login({
-            token: response.token,
+      }),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        dispatch(userActions.login(data.token));
+        fetch("http://localhost:8080/favorites", {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + data.token,
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => {
+            return response.json();
           })
-        );
-        localStorage.setItem("token", JSON.stringify(userToken));
-      },
-    });
-  }, [sendRequest]);
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((err) => {
+            throw err;
+          });
+      })
+      .catch((err) => {
+        throw err;
+      });
+  }, []);
+
   return (
     <div className="App">
-      <Header />
-      <Container maxWidth="lg"></Container>
+      <Container sx={{ height: "100vh" }}>
+        <Header />
+        <Container maxWidth="lg"></Container>
+      </Container>
     </div>
   );
 }
