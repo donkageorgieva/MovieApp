@@ -1,6 +1,6 @@
-const Account = require("../models/account");
+const User = require("../models/user");
 const jwt = require("jsonwebtoken");
-exports.accAuth = (req, res, next) => {
+exports.userAuth = (req, res, next) => {
   if (!req.get("Authorization")) {
     const error = new Error("Authorization  is required");
     error.statusCode = 401;
@@ -19,25 +19,25 @@ exports.accAuth = (req, res, next) => {
     err.statusCode = 401;
     throw err;
   }
-  console.log(decodedToken.accountId, "decoded token");
-  req.accountId = decodedToken.accountId.toString();
+
+  req.userId = decodedToken.userId.toString();
 
   next();
 };
-exports.demoAcc = (req, res, next) => {
-  if (!req.body.accountId && req.body.demo) {
-    Account.findById("621a217f1e027a1dde165b4b")
-      .then((account) => {
-        if (!account) {
-          const err = new Error("Demo account not found");
+exports.demoUser = (req, res, next) => {
+  if (!req.body.userId && req.body.demo) {
+    User.findById("621c83a2eb4c9c895ce7591d")
+      .then((user) => {
+        if (!user) {
+          const err = new Error("Demo user not found");
           err.statusCode = 404;
           throw err;
         }
 
-        req.account = {
-          username: account.username,
-          password: account.password,
-          accountId: account._id,
+        req.user = {
+          username: user.username,
+          password: process.env.DEMOPASS,
+          userId: user._id,
         };
         next();
       })
@@ -48,10 +48,10 @@ exports.demoAcc = (req, res, next) => {
         }
       });
   } else {
-    req.account = {
+    req.user = {
       username: req.body.username,
       password: req.body.password,
-      accountId: req.body.accountId,
+      userId: req.body.userId,
     };
     next();
   }

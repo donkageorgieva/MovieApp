@@ -7,7 +7,7 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const favoritesRouter = require("./routes/favorites");
-const notesRouter = require("./routes/notes");
+
 const ratingsRouter = require("./routes/ratings");
 const authRouter = require("./routes/auth");
 const auth = require("./middleware/auth");
@@ -36,9 +36,8 @@ app.use(
 );
 
 app.use("/auth", authRouter);
-app.use("/favorites", auth.accAuth, favoritesRouter);
+app.use("/", auth.userAuth, favoritesRouter);
 app.use("/ratings", ratingsRouter);
-app.use("/notes", notesRouter);
 app.use(express.static(path.join(__dirname, "public")));
 
 module.exports = app;

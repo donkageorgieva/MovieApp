@@ -1,9 +1,19 @@
 const mongoose = require("mongoose");
 const Favorite = require("./favorite");
+const Note = require("./notes");
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-  name: {
+  username: {
+    type: String,
+    required: true,
+  },
+
+  password: {
+    type: String,
+    required: true,
+  },
+  email: {
     type: String,
     required: true,
   },
@@ -41,9 +51,8 @@ UserSchema.methods.addFavorite = function (movie) {
 };
 
 UserSchema.methods.deleteOneFavorite = function (movieId) {
-  const currFavorites = [...this.favorites];
   let updatedFavorites;
-  let movieToDelete;
+
   if (this.favorites.length <= 0) {
     const err = new Error("Favorites list is empty");
     err.statusCode = 404;
@@ -52,14 +61,23 @@ UserSchema.methods.deleteOneFavorite = function (movieId) {
 
   this.populate("favorites")
     .then((populatedUser) => {
-      // console.log(populatedUser.favorites, "popuser");
-      // console.log(populatedUser);
       updatedFavorites = populatedUser.favorites.filter((fav) => {
         return fav.movieId.trim("") !== movieId.trim("");
       });
-      return Favorite.findOneAndDelete({
-        movieId: movieId,
-      });
+
+      return Favorite.findOne({ movieId: movieId })
+        .then((favorite) => {
+          Note.deleteMany({ favoriteId: favorite._id }).then(() => {
+            return Favorite.findOneAndDelete({ _id: favorite._id });
+          });
+        })
+
+        .catch((err) => {
+          if (!err.statusCode) {
+            err.statusCode = 500;
+            throw err;
+          }
+        });
     })
     .then((result) => {
       this.favorites = updatedFavorites;

@@ -1,28 +1,22 @@
-const Account = require("../models/account");
-const User = require("../models/user");
 const mongoose = require("mongoose");
+const User = require("../models/user");
 exports.addFavorite = (req, res) => {
-  Account.findById(req.accountId)
-    .then((acc) => {
-      if (!acc) {
-        const err = new Error("Account not found");
+  User.findById(req.userId)
+    .then((user) => {
+      if (!user) {
+        const err = new Error("user not found");
         err.statusCode = 404;
         throw err;
       }
-      acc
-        .populate({
-          path: "users",
-          match: {
-            _id: req.body.userId,
-          },
+      user;
+
+      user
+        .addFavorite({
+          name: req.body.name,
+          movieId: req.body.movieId,
+          genres: [...req.body.genres],
         })
-        .then((populatedUser) => {
-          populatedUser.users[0].addFavorite({
-            name: req.body.movieName,
-            movieId: req.body.movieId,
-            genres: [...req.body.genres],
-          });
-        })
+
         .catch((err) => {
           if (!err.statusCode) {
             err.statusCode = 500;
@@ -42,37 +36,29 @@ exports.addFavorite = (req, res) => {
 
 exports.getOneFavorite = (req, res) => {
   let favorite;
-  Account.findById(req.accountId)
-    .then((acc) => {
-      if (!acc) {
-        const err = new Error("Account not found");
+  User.findById(req.userId)
+    .then((user) => {
+      if (!user) {
+        const err = new Error("user not found");
         err.statusCode = 404;
         throw err;
       }
-      acc
+
+      user
         .populate({
-          path: "users",
+          path: "favorites",
           match: {
-            _id: req.userId,
+            movieId: req.params.movieId,
           },
         })
-        .then((populatedacc) => {
-          populatedacc.users[0]
-            .populate({
-              path: "favorites",
-              match: {
-                movieId: req.params.movieId,
-              },
-            })
-            .then((user) => {
-              if (user.favorites.length <= 0) {
-                const err = new Error("Not found");
-                err.statusCode = 404;
-                throw err;
-              }
-              favorite = user.favorites[0];
-              res.send(favorite);
-            });
+        .then((populatedUser) => {
+          if (populatedUser.favorites.length <= 0) {
+            const err = new Error("Not found");
+            err.statusCode = 404;
+            throw err;
+          }
+          favorite = populatedUser.favorites[0];
+          res.send(favorite);
         });
     })
     .catch((err) => {
@@ -84,26 +70,18 @@ exports.getOneFavorite = (req, res) => {
 };
 exports.getFavorites = (req, res) => {
   let favorites;
-  Account.findById(req.accountId)
-    .then((acc) => {
-      if (!acc) {
-        const err = new Error("Account not found");
+  User.findById(req.userId)
+    .then((user) => {
+      if (!user) {
+        const err = new Error("user not found");
         err.statusCode = 404;
         throw err;
       }
-      acc
-        .populate({
-          path: "users",
-          match: {
-            _id: req.userId,
-          },
-        })
-        .then((populatedacc) => {
-          populatedacc.users[0].populate("favorites").then((user) => {
-            favorites = [...user.favorites];
-            res.send(favorites);
-          });
-        });
+
+      user.populate("favorites").then((populatedUser) => {
+        favorites = [...populatedUser.favorites];
+        res.send(favorites);
+      });
     })
     .catch((err) => {
       if (!err.statusCode) {
@@ -113,29 +91,18 @@ exports.getFavorites = (req, res) => {
     });
 };
 exports.deleteOneFavorite = (req, res) => {
-  Account.findById(req.accountId)
-    .then((acc) => {
-      if (!acc) {
-        const err = new Error("Account not found");
+  User.findById(req.userId)
+    .then((user) => {
+      if (!user) {
+        const err = new Error("user not found");
         err.statusCode = 404;
         throw err;
       }
-      acc
-        .populate({
-          path: "users",
-          match: {
-            _id: req.body.userId,
-          },
-        })
-        .then((populatedUser) => {
-          populatedUser.users[0].deleteOneFavorite(req.params.movieId);
-        })
-        .catch((err) => {
-          if (!err.statusCode) {
-            err.statusCode = 500;
-          }
-          throw err;
-        });
+
+      user.deleteOneFavorite(req.params.movieId);
+    })
+    .then((result) => {
+      res.sendStatus(200);
     })
 
     .catch((err) => {
@@ -144,5 +111,73 @@ exports.deleteOneFavorite = (req, res) => {
       }
       throw err;
     });
-  res.sendStatus(200);
+};
+exports.addNote = (req, res) => {
+  User.findById(req.userId)
+    .then((user) => {
+      if (!user) {
+        const err = new Error("user not found");
+        err.statusCode = 404;
+        throw err;
+      }
+
+      user
+        .populate({
+          path: "favorites",
+          match: {
+            movieId: req.params.movieId,
+          },
+        })
+        .then((populated) => {
+          if (!populated.favorites[0]) {
+            const err = new Error("Not found");
+            err.statusCode = 404;
+            throw err;
+          }
+          populated.favorites[0].addNote(req.body.comment);
+        })
+        .then(res.sendStatus(200));
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      throw err;
+    });
+};
+exports.getNotes = (req, res) => {
+  User.findById(req.userId)
+    .then((user) => {
+      if (!user) {
+        const err = new Error("user not found");
+        err.statusCode = 404;
+        throw err;
+      }
+
+      user
+        .populate({
+          path: "favorites",
+
+          match: {
+            movieId: req.params.movieId,
+          },
+        })
+        .then((populatedUser) => {
+          populatedUser.favorites[0].populate("notes").then((populatedfav) => {
+            res.send(populatedfav.notes);
+          });
+        })
+        .catch((err) => {
+          if (!err.statusCode) {
+            err.statusCode = 500;
+          }
+          throw err;
+        });
+    })
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      throw err;
+    });
 };
