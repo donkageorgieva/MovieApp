@@ -3,26 +3,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { TextField, Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
+import useFetch from "../../../hooks/useFetch";
 import { moviesActions } from "../../../store/movies/movies";
+import customThunk from "../../../store/movies/customThunk";
 const SearchInput = (props) => {
   const [query, setQuery] = useState("");
-  const globalMovies = useSelector((state) => state.movies);
+  const { sendRequest, result } = useFetch();
+  const moviesInState = useSelector((state) => state.movies.movies);
   const dispatch = useDispatch();
   const handleSearch = () => {
-    fetch(`https://api.tvmaze.com/search/shows?q=${query}`)
-      .then((res) => res.json())
-      .then((movies) => {
-        console.log(movies);
-        dispatch(
-          moviesActions.setMovies({
-            movies,
-          })
-        );
-        console.log(globalMovies);
+    dispatch(
+      customThunk({
+        url: `https://api.tvmaze.com/search/shows?q=${query}`,
+        reconstruct: true,
+        fn: moviesActions.setMovies,
+        search: true,
       })
-      .catch((err) => {
-        throw err;
-      });
+    );
   };
   return (
     <Box sx={{ display: "flex", alignItems: "center" }}>

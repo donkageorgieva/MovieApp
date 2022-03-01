@@ -14,7 +14,7 @@ const Header = () => {
       sx={{
         display: "flex",
         alignItems: "center",
-        height: "40vh",
+        minHeight: "40vh",
         width: "100%",
         backgroundImage: `url(${headerImg})`,
         objectFit: "scale-down",

@@ -34,8 +34,8 @@ function App() {
       sendRequest({
         url: "http://localhost:8080/auth/login",
         token: "",
-        auth: true,
         method: "POST",
+        auth: true,
         body: {
           username: "",
           password: "",

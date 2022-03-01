@@ -6,7 +6,7 @@ const AppBarComponent = (props) => {
     <AppBar
       position="static"
       color="primary"
-      sx={{ padding: "1rem 0em 1rem 0rem", height: "10vh" }}
+      sx={{ padding: "1rem 0em 1rem 0rem", minHeight: "10vh" }}
       component="nav"
     >
       <Container
