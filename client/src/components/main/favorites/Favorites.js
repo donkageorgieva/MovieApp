@@ -4,7 +4,7 @@ const Favorites = (props) => {
   const favorites = useSelector((state) => state.favorites.favorites);
 
   return (
-    <Box component="main" bgcolor="primary.main" sx={{ height: "50vh" }}>
+    <Box component="main" sx={{ minHeight: "50vh" }}>
       <Container maxWidth="lg" sx={{ textAlign: "center" }}>
         <Typography
           variant="h4"

@@ -32,6 +32,10 @@ export const favSlice = createSlice({
         (fav) => fav.movieId.trim() !== movie.movieId.trim()
       );
     },
+    setFavorites(state, actions) {
+      const favorites = actions.payload.favorites;
+      state.favorites = favorites;
+    },
   },
 });
 

@@ -19,16 +19,18 @@ const theme = createTheme({
     text: {
       primary: textColor,
     },
-    typography: {
-      allVariants: {
-        color: textColor,
-      },
-    },
   },
 });
 
 theme.components = {
   MuiOutlinedInput: {
+    styleOverrides: {
+      root: {
+        color: textColor,
+      },
+    },
+  },
+  MuiTypography: {
     styleOverrides: {
       root: {
         color: textColor,
