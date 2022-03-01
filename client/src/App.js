@@ -1,11 +1,10 @@
 import { useEffect } from "react";
-
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "./store/user/user";
-import { Container } from "@mui/material";
 import Header from "./components/header/Header";
-
+import AppBarComponent from "./components/appbar/AppBarComponent";
+import Favorites from "./components/favorites/Favorites";
 function App() {
   const dispatch = useDispatch();
   const userToken = useSelector((state) => state.user.token);
@@ -51,10 +50,9 @@ function App() {
 
   return (
     <div className="App">
-      <Container sx={{ height: "100vh" }}>
-        <Header />
-        <Container maxWidth="lg"></Container>
-      </Container>
+      <AppBarComponent />
+      <Header />
+      <Favorites />
     </div>
   );
 }
