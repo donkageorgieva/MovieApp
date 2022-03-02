@@ -31,17 +31,6 @@ const FavoriteSchema = new Schema({
   },
 });
 
-FavoriteSchema.methods.addNote = function (comment) {
-  const currNotes = [...this.notes];
-  const note = new Note({
-    comment,
-    favoriteId: this._id,
-  });
-  note.save();
-  currNotes.push(note);
-  this.notes = currNotes;
-  return this.save();
-};
 FavoriteSchema.methods.addRating = function (amount) {
   this.rating = amount;
   return this.save();

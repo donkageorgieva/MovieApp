@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const Favorite = require("../models/favorite");
+const Note = require("../models/notes");
 const User = require("../models/user");
 exports.addFavorite = (req, res) => {
   User.findById(req.userId)
@@ -101,6 +102,7 @@ exports.deleteOneFavorite = (req, res) => {
 
       Favorite.findOneAndDelete({ movieId: req.params.movieId }).then(
         (result) => {
+          Note.deleteMany({ favoriteId: req.params.movieId });
           console.log(result);
           user.deleteOneFavorite(result._id);
         }
@@ -109,7 +111,7 @@ exports.deleteOneFavorite = (req, res) => {
     .then((result) => {
       console.log(result);
       res.status(200).json({
-        data: result,
+        data: req.params.movieId,
       });
     })
 
@@ -190,8 +192,6 @@ exports.getNotes = (req, res) => {
     });
 };
 exports.modifyRating = (req, res) => {
-  console.log("adding rating");
-
   User.findById(req.userId)
     .then((user) => {
       if (!user) {

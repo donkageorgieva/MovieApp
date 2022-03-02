@@ -6,9 +6,9 @@ const NoteSchema = new Schema({
     type: String,
     required: true,
   },
-  favoriteId: {
-    type: Schema.Types.ObjectId,
-    ref: "Favorite",
+  movieId: {
+    type: String,
+    required: true,
   },
 });
 

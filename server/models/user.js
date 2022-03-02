@@ -24,6 +24,24 @@ const UserSchema = new Schema({
       required: true,
     },
   ],
+  notes: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Note",
+      required: true,
+    },
+  ],
+  ratings: [
+    {
+      type: Number,
+      min: 0,
+      max: 5,
+      movieId: {
+        type: "String",
+        required: true,
+      },
+    },
+  ],
 });
 
 UserSchema.methods.addFavorite = function (movie) {
@@ -47,6 +65,18 @@ UserSchema.methods.addFavorite = function (movie) {
   newFavorites.push(favorite);
 
   this.favorites = newFavorites;
+  return this.save();
+};
+
+UserSchema.methods.addNote = function (movie) {
+  const currNotes = [...this.notes];
+  const note = new Note({
+    comment: movie.comment,
+    movieId: movie.movieId,
+  });
+  note.save();
+  currNotes.push(note);
+  this.notes = currNotes;
   return this.save();
 };
 

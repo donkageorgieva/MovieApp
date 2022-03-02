@@ -26,12 +26,6 @@ router.post(
   favoritesController.addFavorite
 );
 router.delete("/favorites/:movieId", favoritesController.deleteOneFavorite);
-router.post(
-  "/notes/:movieId",
-  [body("comment").exists().isString().trim().not().isEmpty()],
-  favoritesController.addNote
-);
-router.get("/notes/:movieId", favoritesController.getNotes);
 router.put(
   "/ratings/:movieId",
   [body("rating").exists().isNumeric({ min: 0, max: 5 })],
