@@ -18,7 +18,17 @@ export const detailSlice = createSlice({
       };
     },
     comment(state, actions) {
-      console.log(actions.payload);
+      state.movie.notes.push({
+        ...actions.payload.movie,
+      });
+    },
+    setNotes(state, actions) {
+      console.log(actions.payload, "payloading for notes");
+      state.movie.notes = actions.payload.notes.data.map((note) => {
+        return {
+          ...note,
+        };
+      });
     },
   },
 });

@@ -8,6 +8,7 @@ router.post(
   [body("comment").exists().isString().trim().not().isEmpty()],
   userController.addNote
 );
+router.get("/:movieId", userController.getNotes);
 // router.delete("/:movieId");
 // router.get("/:movieId", favoritesController.getNotes);
 

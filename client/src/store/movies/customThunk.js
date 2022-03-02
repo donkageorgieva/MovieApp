@@ -69,8 +69,9 @@ const thunkActions = (config, token = "") => {
           );
         }
         if (config.addNote) {
+          console.log(data, "data from note adding");
           dispatch(
-            moviesActions.addNote({
+            detailsActions.comment({
               movie: data.data,
             })
           );
@@ -88,6 +89,14 @@ const thunkActions = (config, token = "") => {
                 runtime: data[0].show.runtime && data[0].show.runtime,
                 id: data[0].show.id,
               },
+            })
+          );
+          config.fn();
+        }
+        if (config.getNotes) {
+          dispatch(
+            detailsActions.setNotes({
+              notes: data,
             })
           );
         }

@@ -12,7 +12,6 @@ const Details = (props) => {
   const [comment, setComment] = useState("");
 
   const addNote = (e) => {
-    console.log(movie.id, "add note movie id");
     dispatch(
       thunkActions(
         {
@@ -22,25 +21,42 @@ const Details = (props) => {
           body: JSON.stringify({
             comment,
           }),
-          addFav: true,
+          addNote: true,
         },
         userToken
       )
     );
   };
   useEffect(() => {
-    dispatch(
-      thunkActions({
-        url: `https://api.tvmaze.com/search/shows?q=${params.title}`,
-
-        display: true,
-      })
-    );
-    console.log(movie, "state movie");
-  }, [dispatch, params.title]);
+    if (userToken) {
+      dispatch(
+        thunkActions({
+          url: `https://api.tvmaze.com/search/shows?q=${params.title}`,
+          display: true,
+          fn: () => {
+            dispatch(
+              thunkActions(
+                {
+                  url: `http://localhost:8080/notes/${movie.id}`,
+                  method: "GET",
+                  auth: true,
+                  getNotes: true,
+                },
+                userToken
+              )
+            );
+          },
+        })
+      );
+    }
+  }, [dispatch, params.title, userToken]);
+  useEffect(() => {
+    console.log(movie.notes, "movie currently");
+  }, []);
   return (
     <React.Fragment>
       <h1>{movie ? movie.name : null}</h1>
+
       <textarea
         onChange={(e) => {
           setComment(e.target.value);
