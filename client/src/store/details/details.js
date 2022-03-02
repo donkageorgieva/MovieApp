@@ -5,6 +5,7 @@ const initialState = {
     name: "",
     movieId: "",
     notes: [],
+    rating: 0,
   },
 };
 
@@ -22,8 +23,12 @@ export const detailSlice = createSlice({
         ...actions.payload.movie,
       });
     },
+    removeNote(state, actions) {
+      console.log(actions.payload);
+    },
     setNotes(state, actions) {
-      console.log(actions.payload, "payloading for notes");
+      console.log(actions.payload.notes, "NOTES payload");
+      // state.movie.notes = actions.payload.notes;
       state.movie.notes = actions.payload.notes.data.map((note) => {
         return {
           ...note,

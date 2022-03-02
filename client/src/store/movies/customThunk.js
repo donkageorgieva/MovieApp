@@ -91,7 +91,9 @@ const thunkActions = (config, token = "") => {
               },
             })
           );
-          config.fn();
+          if (config.fn()) {
+            config.fn();
+          }
         }
         if (config.getNotes) {
           dispatch(
@@ -100,6 +102,15 @@ const thunkActions = (config, token = "") => {
             })
           );
         }
+        if (config.deleteNote) {
+          console.log("deleting", data);
+          dispatch(
+            detailsActions.removeNote({
+              notes: data,
+            })
+          );
+        }
+        console.log(config, "config");
       })
       .catch((err) => {
         throw err;

@@ -73,11 +73,13 @@ UserSchema.methods.addNote = function (movie) {
   const note = new Note({
     comment: movie.comment,
     movieId: movie.movieId,
+    userId: this._id,
   });
   note.save();
   currNotes.push(note);
   this.notes = currNotes;
-  return this.save();
+  this.save();
+  return note._id;
 };
 
 UserSchema.methods.deleteOneFavorite = function (movieId) {
@@ -93,6 +95,15 @@ UserSchema.methods.deleteOneFavorite = function (movieId) {
   );
   console.log(updatedFavorites, "updatedFavs");
   this.favorites = updatedFavorites;
+  return this.save();
+};
+UserSchema.methods.deleteOneNote = function (id) {
+  let updatedNotes = [...this.notes];
+  updatedNotes = this.notes.filter(
+    (note) => note._id.toString().trim() !== id.toString().trim()
+  );
+  console.log(updatedNotes, "updatedNotes");
+  this.notes = updatedNotes;
   return this.save();
 };
 const User = mongoose.model("User", UserSchema);
