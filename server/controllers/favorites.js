@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Favorite = require("../models/favorite");
 const User = require("../models/user");
 exports.addFavorite = (req, res) => {
   User.findById(req.userId)
@@ -13,6 +14,7 @@ exports.addFavorite = (req, res) => {
         name: req.body.name,
         movieId: req.body.movieId,
         genres: [...req.body.genres],
+        image: req.body.image,
       };
       user.addFavorite(movie);
       res.status(200).json({
@@ -21,6 +23,7 @@ exports.addFavorite = (req, res) => {
           name: req.body.name,
           movieId: req.body.movieId,
           genres: [...req.body.genres],
+          image: req.body.image,
         },
       });
     })
@@ -96,10 +99,18 @@ exports.deleteOneFavorite = (req, res) => {
         throw err;
       }
 
-      user.deleteOneFavorite(req.params.movieId);
+      Favorite.findOneAndDelete({ movieId: req.params.movieId }).then(
+        (result) => {
+          console.log(result);
+          user.deleteOneFavorite(result._id);
+        }
+      );
     })
     .then((result) => {
-      res.sendStatus(200);
+      console.log(result);
+      res.status(200).json({
+        data: result,
+      });
     })
 
     .catch((err) => {
