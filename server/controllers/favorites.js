@@ -9,20 +9,20 @@ exports.addFavorite = (req, res) => {
         throw err;
       }
       user;
-
-      user
-        .addFavorite({
+      const movie = {
+        name: req.body.name,
+        movieId: req.body.movieId,
+        genres: [...req.body.genres],
+      };
+      user.addFavorite(movie);
+      res.status(200).json({
+        message: "Success",
+        data: {
           name: req.body.name,
           movieId: req.body.movieId,
           genres: [...req.body.genres],
-        })
-
-        .catch((err) => {
-          if (!err.statusCode) {
-            err.statusCode = 500;
-          }
-          throw err;
-        });
+        },
+      });
     })
 
     .catch((err) => {
@@ -31,7 +31,6 @@ exports.addFavorite = (req, res) => {
       }
       throw err;
     });
-  res.sendStatus(200);
 };
 
 exports.getOneFavorite = (req, res) => {

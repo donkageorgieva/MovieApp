@@ -6,6 +6,7 @@ exports.userAuth = (req, res, next) => {
     error.statusCode = 401;
     throw error;
   }
+
   const token = req.get("Authorization").split(" ")[1];
   let decodedToken;
   try {

@@ -13,7 +13,6 @@ const FavoriteSchema = new Schema({
   genres: [
     {
       type: String,
-      required: true,
     },
   ],
   notes: [

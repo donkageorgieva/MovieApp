@@ -10,18 +10,6 @@ const favoritesRouter = require("./routes/favorites");
 const authRouter = require("./routes/auth");
 const auth = require("./middleware/auth");
 
-mongoose
-  .connect(
-    `mongodb+srv://admin:${process.env.PASSWORD}@movie-app-api.eq8yx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
-  )
-  .then()
-  .catch((err) => {
-    if (!err.statusCode) {
-      err.statusCode = 500;
-    }
-    throw err;
-  });
-
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -35,6 +23,26 @@ app.use(
 
 app.use("/auth", authRouter);
 app.use("/", auth.userAuth, favoritesRouter);
+
+app.use((err, req, res, next) => {
+  const status = err.statusCode || 500;
+  const message = err.message;
+  const data = err.data;
+  res.status(status).json({ message: message, data: data });
+  next();
+});
+mongoose
+  .connect(
+    `mongodb+srv://admin:${process.env.PASSWORD}@movie-app-api.eq8yx.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+  )
+  .then()
+  .catch((err) => {
+    if (!err.statusCode) {
+      err.statusCode = 500;
+    }
+    throw err;
+  });
+
 app.use(express.static(path.join(__dirname, "public")));
 
 module.exports = app;
