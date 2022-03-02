@@ -10,6 +10,9 @@ const FavoriteSchema = new Schema({
     type: String,
     required: true,
   },
+  image: {
+    type: String,
+  },
   genres: [
     {
       type: String,
