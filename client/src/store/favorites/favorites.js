@@ -35,6 +35,7 @@ export const favSlice = createSlice({
     setFavorites(state, actions) {
       const favorites = actions.payload.favorites;
       state.favorites = favorites;
+      console.log(favorites, "setting favs");
     },
   },
 });
