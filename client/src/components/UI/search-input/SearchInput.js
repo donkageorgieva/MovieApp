@@ -13,7 +13,7 @@ const SearchInput = (props) => {
       customThunk({
         url: `https://api.tvmaze.com/search/shows?q=${query}`,
         reconstruct: true,
-        fn: moviesActions.setMovies,
+
         search: true,
       })
     );

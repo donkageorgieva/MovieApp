@@ -4,7 +4,6 @@ import { useSelector } from "react-redux";
 import Cross from "../../../images/close.png";
 const Favorites = (props) => {
   const favorites = useSelector((state) => state.favorites.favorites);
-  console.log(favorites, "favorites");
   const favoriteItems = favorites.map((fav) => {
     if (!fav) {
       return;

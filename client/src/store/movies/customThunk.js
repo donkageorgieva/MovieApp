@@ -1,8 +1,8 @@
 import { userActions } from "../user/user";
 import { moviesActions } from "./movies";
 import { favActions } from "../favorites/favorites";
+import { detailsActions } from "../details/details";
 const thunkActions = (config, token = "") => {
-  console.log(token, "config token");
   const authHeaders = {
     "Authorization": "Bearer " + token,
     "Content-Type": "application/json",
@@ -18,7 +18,6 @@ const thunkActions = (config, token = "") => {
       })
       .then((data) => {
         if (config.search) {
-          console.log(data);
           dispatch(
             moviesActions.setMovies({
               movies: data.map((movie) => {
@@ -63,10 +62,32 @@ const thunkActions = (config, token = "") => {
           );
         }
         if (config.removeFav) {
-          console.log(data, "data thunk");
           dispatch(
             favActions.removeFavorite({
               favorite: data.data,
+            })
+          );
+        }
+        if (config.addNote) {
+          dispatch(
+            moviesActions.addNote({
+              movie: data.data,
+            })
+          );
+        }
+        if (config.display) {
+          dispatch(
+            detailsActions.display({
+              movie: {
+                name: data[0].show.name && data[0].show.name,
+                genres: data[0].show.genres && [...data[0].show.genres],
+                image: data[0].show.image && data[0].show.image.medium,
+                url: data[0].show.url && data[0].show.url,
+                summary: data[0].show.summary && data[0].show.summary,
+                premiered: data[0].show.premiered && data[0].show.premiered,
+                runtime: data[0].show.runtime && data[0].show.runtime,
+                id: data[0].show.id,
+              },
             })
           );
         }

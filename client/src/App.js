@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Box } from "@mui/system";
 import { userActions } from "./store/user/user";
-
+import Details from "./components/details/Details";
 import Header from "./components/main/header/Header";
 import AppBarComponent from "./components/appbar/AppBarComponent";
 import Favorites from "./components/main/favorites/Favorites";
@@ -13,6 +13,7 @@ import "./App.css";
 function App() {
   const dispatch = useDispatch();
   const userToken = useSelector((state) => state.user.token);
+
   useEffect(() => {
     const savedToken = window.localStorage.getItem("token");
     if (!savedToken) {
@@ -67,6 +68,7 @@ function App() {
       <Box bgcolor="primary.main" sx={{ minHeight: "100vh" }}>
         <AppBarComponent />
         <Routes>
+          <Route element={<Details />} path="/movies/:title"></Route>
           <Route
             element={
               <React.Fragment>
