@@ -26,17 +26,7 @@ const useFetch = (dispatch) => {
       .then((data) => {
         if (!continueFetching) {
           if (config.reconstruct) {
-            setResult(
-              data.map((movie) => {
-                return {
-                  name: movie.show.name,
-                  genres: [...movie.show.genres],
-                  image: movie.show.image,
-                  url: movie.show.url,
-                  summary: movie.show.summary,
-                };
-              })
-            );
+            setResult();
           } else {
             setResult(data);
             if (config.fn) {

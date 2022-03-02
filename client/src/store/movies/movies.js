@@ -9,8 +9,16 @@ export const movieSlice = createSlice({
   initialState,
   reducers: {
     setMovies(state, actions) {
-      console.log("setting movies", actions.payload.movies);
       state.movies = actions.payload.movies;
+    },
+    addMovie(state, actions) {
+      const exists = state.movies.find((movie) => {
+        return movie.id.toString().trim() === actions.payload.movie.id.trim();
+      });
+      if (exists) {
+        return;
+      }
+      state.movies.push(actions.payload.movie);
     },
   },
 });

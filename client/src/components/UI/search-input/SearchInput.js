@@ -1,15 +1,12 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { TextField, Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
-import useFetch from "../../../hooks/useFetch";
 import { moviesActions } from "../../../store/movies/movies";
 import customThunk from "../../../store/movies/customThunk";
 const SearchInput = (props) => {
   const [query, setQuery] = useState("");
-  const { sendRequest, result } = useFetch();
-  const moviesInState = useSelector((state) => state.movies.movies);
   const dispatch = useDispatch();
   const handleSearch = () => {
     dispatch(

@@ -7,7 +7,6 @@ const thunkActions = (config, token = "") => {
     "Authorization": "Bearer " + token,
     "Content-Type": "application/json",
   };
-  console.log(authHeaders, "headers");
   return async (dispatch) => {
     return fetch(config.url, {
       method: config.method ? config.method : "GET",
@@ -19,15 +18,19 @@ const thunkActions = (config, token = "") => {
       })
       .then((data) => {
         if (config.search) {
+          console.log(data);
           dispatch(
             moviesActions.setMovies({
               movies: data.map((movie) => {
                 return {
-                  name: movie.show.name,
-                  genres: [...movie.show.genres],
-                  image: movie.show.image.medium,
-                  url: movie.show.url,
-                  summary: movie.show.summary,
+                  name: movie.show.name && movie.show.name,
+                  genres: movie.show.genres && [...movie.show.genres],
+                  image: movie.show.image && movie.show.image.medium,
+                  url: movie.show.url && movie.show.url,
+                  summary: movie.show.summary && movie.show.summary,
+                  premiered: movie.show.premiered && movie.show.premiered,
+                  runtime: movie.show.runtime && movie.show.runtime,
+                  id: movie.show.id,
                 };
               }),
             })
@@ -49,6 +52,14 @@ const thunkActions = (config, token = "") => {
           dispatch(
             favActions.setFavorites({
               favorites: data,
+            })
+          );
+        }
+        if (config.addFav) {
+          console.log(data);
+          dispatch(
+            favActions.addFavorite({
+              favorite: data.data,
             })
           );
         }
