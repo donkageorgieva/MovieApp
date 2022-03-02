@@ -56,9 +56,16 @@ const thunkActions = (config, token = "") => {
           );
         }
         if (config.addFav) {
-          console.log(data);
           dispatch(
             favActions.addFavorite({
+              favorite: data.data,
+            })
+          );
+        }
+        if (config.removeFav) {
+          console.log(data, "data thunk");
+          dispatch(
+            favActions.removeFavorite({
               favorite: data.data,
             })
           );

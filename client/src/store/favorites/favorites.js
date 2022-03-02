@@ -1,7 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  favorites: [],
+  favorites: [
+    {
+      movieId: "",
+      name: "",
+      summary: "",
+      image: "",
+      genres: [],
+    },
+  ],
 };
 
 export const favSlice = createSlice({
@@ -9,28 +17,25 @@ export const favSlice = createSlice({
   initialState,
   reducers: {
     addFavorite(state, actions) {
-      const movie = actions.payload.movie;
-      if (
-        state.favorites.find(
-          (fav) => fav.movieId.trim() === movie.movieId.trim()
-        )
-      ) {
+      const doesExist = state.favorites.find((fav) => {
+        return fav.movieId.trim() === actions.payload.favorite.movieId.trim();
+      });
+      if (doesExist) {
         return;
       }
-      state.favorites.push(actions.payload.movie);
+      state.favorites.push(actions.payload.favorite);
     },
     removeFavorite(state, actions) {
-      const movie = actions.payload.movie;
-      if (
-        !state.favorites.find(
-          (fav) => fav.movieId.trim() === movie.movieId.trim()
-        )
-      ) {
+      console.log(actions.payload.favorite, "favorite remove");
+      const doesExist = state.favorites.find((fav) => {
+        return fav.movieId.trim() === actions.payload.favorite.trim();
+      });
+      if (!doesExist) {
         return;
       }
-      state.favorites = state.favorites.filter(
-        (fav) => fav.movieId.trim() !== movie.movieId.trim()
-      );
+      state.favorites = state.favorites.filter((fav) => {
+        return fav.movieId.trim() !== actions.payload.favorite.trim();
+      });
     },
     setFavorites(state, actions) {
       const favorites = actions.payload.favorites;

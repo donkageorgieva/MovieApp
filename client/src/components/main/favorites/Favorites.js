@@ -1,10 +1,27 @@
-import { Box, Typography, Button, Card, Container } from "@mui/material";
+import { Box, Typography, Container, ImageList } from "@mui/material";
+import Favorite from "./favorite/Favorite";
 import { useSelector } from "react-redux";
+import Cross from "../../../images/close.png";
 const Favorites = (props) => {
   const favorites = useSelector((state) => state.favorites.favorites);
-
+  console.log(favorites, "favorites");
+  const favoriteItems = favorites.map((fav) => {
+    if (!fav) {
+      return;
+    }
+    return (
+      <Favorite
+        image={!fav.image ? Cross : fav.image}
+        key={fav.id}
+        name={fav.name}
+      />
+    );
+  });
   return (
-    <Box component="main" sx={{ minHeight: "50vh" }}>
+    <Box
+      component="main"
+      sx={{ minHeight: "50vh", maxHeight: "100%", py: "2rem" }}
+    >
       <Container maxWidth="lg" sx={{ textAlign: "center" }}>
         <Typography
           variant="h4"
@@ -14,6 +31,9 @@ const Favorites = (props) => {
         >
           {favorites.length <= 0 ? "Your list is empty" : "Your Favorites"}
         </Typography>
+        {favorites.length > 0 ? (
+          <ImageList cols={5}>{favoriteItems}</ImageList>
+        ) : null}
       </Container>
     </Box>
   );

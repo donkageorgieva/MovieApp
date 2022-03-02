@@ -8,7 +8,7 @@ const Search = () => {
   const movies = useSelector((state) => state.movies.movies);
   const dispatch = useDispatch();
   const userToken = useSelector((state) => state.user.token);
-  const onAddFavorite = (movie) => {
+  const addFav = (movie) => {
     dispatch(
       thunkActions(
         {
@@ -19,8 +19,23 @@ const Search = () => {
             name: movie.name,
             movieId: movie.id,
             genres: [...movie.genres],
+            image: movie.image && movie.image,
           }),
           addFav: true,
+        },
+        userToken
+      )
+    );
+  };
+
+  const removeFav = (movie) => {
+    dispatch(
+      thunkActions(
+        {
+          url: `http://localhost:8080/favorites/${movie.id}`,
+          method: "DELETE",
+          auth: true,
+          removeFav: true,
         },
         userToken
       )
@@ -39,13 +54,15 @@ const Search = () => {
               url={movie.url}
               summary={movie.summary}
               runtime={movie.runtime}
-              onClick={onAddFavorite.bind(null, movie)}
+              addFav={addFav.bind(null, movie)}
+              removeFav={removeFav.bind(null, movie)}
+              movieId={movie.id.toString()}
             />
           </ListItem>
         );
       })
     ) : (
-      <Typography>Loading...</Typography>
+      <Typography> </Typography>
     );
   return (
     <Container maxWidth="lg" component="section">
