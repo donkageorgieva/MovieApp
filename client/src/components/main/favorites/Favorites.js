@@ -4,18 +4,21 @@ import { useSelector } from "react-redux";
 import Cross from "../../../images/close.png";
 const Favorites = (props) => {
   const favorites = useSelector((state) => state.favorites.favorites);
-  const favoriteItems = favorites.map((fav) => {
-    if (!fav) {
-      return;
-    }
-    return (
-      <Favorite
-        image={!fav.image ? Cross : fav.image}
-        key={fav.id}
-        name={fav.name}
-      />
-    );
-  });
+  const favoriteItems =
+    favorites.length > 0
+      ? favorites.map((fav) => {
+          if (!fav) {
+            return;
+          }
+          return (
+            <Favorite
+              image={!fav.image ? Cross : fav.image}
+              key={fav.id}
+              name={fav.name}
+            />
+          );
+        })
+      : null;
   return (
     <Box
       component="main"

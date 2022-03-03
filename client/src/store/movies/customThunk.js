@@ -49,7 +49,7 @@ const thunkActions = (config, token = "") => {
             })
           );
 
-          window.localStorage.setItem("token", JSON.stringify(data.token));
+          localStorage.setItem("token", JSON.stringify(data.token));
           if (config.fn) {
             config.fn();
           }
