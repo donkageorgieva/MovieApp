@@ -247,6 +247,7 @@ const Details = (props) => {
                       alignItems: "center",
                       justifyContent: "space-between",
                     }}
+                    key={note._id}
                   >
                     <CancelIcon
                       sx={{
