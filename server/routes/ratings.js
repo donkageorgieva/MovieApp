@@ -8,11 +8,11 @@ router.put(
   userController.addRating
 );
 
-// router.delete(
-//   "/:movieId",
-//   [body("value").exists().isNumeric({ min: 0, max: 5 })],
-//   userController.removeRating
-// );
+router.delete(
+  "/:movieId",
+
+  userController.removeRating
+);
 router.get("/:movieId", userController.getRating);
 
 module.exports = router;

@@ -25,7 +25,7 @@ const UserSchema = new Schema({
       required: true,
     },
   ],
-  notes: [
+  Ratings: [
     {
       type: Schema.Types.ObjectId,
       ref: "Note",
@@ -66,15 +66,15 @@ UserSchema.methods.addFavorite = function (movie) {
 };
 
 UserSchema.methods.addNote = function (movie) {
-  const currNotes = [...this.notes];
+  const currRatings = [...this.Ratings];
   const note = new Note({
     comment: movie.comment,
     movieId: movie.movieId,
     userId: this._id,
   });
   note.save();
-  currNotes.push(note);
-  this.notes = currNotes;
+  currRatings.push(note);
+  this.Ratings = currRatings;
   this.save();
   return note._id;
 };
@@ -95,13 +95,13 @@ UserSchema.methods.deleteOneFavorite = function (movieId) {
   return this.save();
 };
 UserSchema.methods.deleteOneNote = function (id) {
-  let updatedNotes = [...this.notes];
-  updatedNotes = this.notes.filter(
+  let updatedRatings = [...this.Ratings];
+  updatedRatings = this.Ratings.filter(
     (note) => note._id.toString().trim() !== id.toString().trim()
   );
-  this.notes = updatedNotes;
+  this.Ratings = updatedRatings;
   this.save();
-  return this.notes;
+  return this.Ratings;
 };
 
 UserSchema.methods.addRating = function (data) {
@@ -109,7 +109,7 @@ UserSchema.methods.addRating = function (data) {
   Rating.findOne({ movieId: data.movieId.trim() })
     .then((foundRating) => {
       if (foundRating) {
-        foundRating.changeValue({
+        return foundRating.changeValue({
           value: data.value,
         });
       } else {
@@ -125,13 +125,22 @@ UserSchema.methods.addRating = function (data) {
         return this.save();
       }
     })
-    .then((result) => {})
+
     .catch((err) => {
       if (!err.statusCode) {
         err.statusCode = 500;
       }
       throw err;
     });
+};
+UserSchema.methods.deleteOneRating = function (id) {
+  let updatedRatings = [...this.ratings];
+  updatedRatings = this.ratings.filter(
+    (rate) => rate._id.toString().trim() !== id.toString().trim()
+  );
+  this.ratings = updatedRatings;
+  this.save();
+  return this.ratings;
 };
 
 const User = mongoose.model("User", UserSchema);

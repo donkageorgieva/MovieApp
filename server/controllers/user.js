@@ -1,7 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const Note = require("../models/notes");
 const User = require("../models/user");
-
+const Rating = require("../models/rating");
 exports.addNote = (req, res) => {
   User.findById(req.userId)
     .then((user) => {
@@ -77,18 +77,22 @@ exports.addRating = (req, res) => {
         throw err;
       }
 
-      return user.addRating({
+      user.addRating({
         value: req.body.value,
         movieId: req.params.movieId,
       });
-    })
-    .then((id) => {
-      res.status(200).json({
-        data: {
-          value: req.body.value,
-          movieId: req.params.movieId,
-          _id: id,
-        },
+      user.populate("ratings").then((populatedUserRatings) => {
+        res.status(200).json({
+          data: populatedUserRatings.ratings.filter((rating) => {
+            if (rating.movieId.trim() === req.params.movieId.trim()) {
+              return {
+                value: rating.value,
+                movieId: rating.movieId,
+                id: rating._id,
+              };
+            }
+          }),
+        });
       });
     })
 
@@ -101,17 +105,16 @@ exports.getRating = (req, res) => {
   User.findById(req.userId)
     .then((user) => {
       user.populate("ratings").then((populatedUserRatings) => {
-        console.log(req.params.movieId, "params ");
+        console.log(populatedUserRatings);
         res.status(200).json({
           data: populatedUserRatings.ratings.filter((rating) => {
-            console.log(rating, "each user rating");
             if (rating.movieId.trim() === req.params.movieId.trim()) {
               return {
                 value: rating.value,
                 movieId: rating.movieId,
                 id: rating._id,
               };
-            } else return;
+            }
           }),
         });
       });
@@ -119,4 +122,22 @@ exports.getRating = (req, res) => {
     .catch((err) => {
       throw err;
     });
+};
+
+exports.removeRating = (req, res) => {
+  User.findById(req.userId).then((user) => {
+    if (!user) {
+      const err = new Error("user not found");
+      err.statusCode = 404;
+      throw err;
+    }
+    Rating.findOneAndDelete({
+      _id: mongoose.Types.ObjectId(req.body.ratingId),
+    }).then((result) => {
+      res.status(200).json({
+        data: result,
+      });
+      user.deleteOneRating(req.body.ratingId);
+    });
+  });
 };
