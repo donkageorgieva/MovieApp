@@ -109,6 +109,7 @@ exports.getRating = (req, res) => {
         res.status(200).json({
           data: populatedUserRatings.ratings.filter((rating) => {
             if (rating.movieId.trim() === req.params.movieId.trim()) {
+              console.log(rating, "match");
               return {
                 value: rating.value,
                 movieId: rating.movieId,

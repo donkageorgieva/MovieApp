@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 const Favorite = (props) => {
-  const link = `/movies/${props.name}`;
   return (
-    <Link to={link} style={{ height: "15rem", width: "10rem" }}>
+    <Link
+      to={`/movies/${props.name}`}
+      style={{ height: "15rem", width: "10rem" }}
+    >
       <img
         src={props.image}
         alt={props.name}

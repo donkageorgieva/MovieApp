@@ -1,12 +1,19 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
-import { Rating, Box } from "@mui/material";
+import {
+  Rating,
+  Box,
+  Container,
+  TextareaAutosize,
+  CardContent,
+} from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Typography } from "@mui/material";
 import Movie from "../search/movie/Movie";
 import thunkActions from "../../store/movies/customThunk";
-
+import CancelIcon from "@mui/icons-material/Cancel";
+import { Button, TextField, Card } from "@mui/material";
 const Details = (props) => {
   const dispatch = useDispatch();
   const movie = useSelector((state) => state.details.movie);
@@ -130,60 +137,132 @@ const Details = (props) => {
             method: "GET",
             auth: true,
             getNotes: true,
-          },
-          userToken
-        )
-      );
-      dispatch(
-        thunkActions(
-          {
-            url: `http://localhost:8080/ratings/${movie.id}`,
-            method: "GET",
-            auth: true,
-
-            fetchRating: true,
+            fn: () => {
+              dispatch(
+                thunkActions(
+                  {
+                    url: `http://localhost:8080/ratings/${movie.id}`,
+                    method: "GET",
+                    auth: true,
+                    fetchRating: true,
+                  },
+                  userToken
+                )
+              );
+            },
           },
           userToken
         )
       );
     }
   }, [movie.id, dispatch, userToken]);
-
+  const movieElement = movie.name.length > 0 && (
+    <Movie
+      premiered={movie.premiered}
+      image={movie.image && movie.image}
+      genres={movie.genres}
+      movieId={movie.id.toString()}
+      runtime={movie.runtime}
+      summary={movie.summary}
+      url={movie.url}
+      name={movie.name}
+    />
+  );
   return (
     <React.Fragment>
-      <Typography>{movie ? movie.name : null}</Typography>
-      <Typography>Your review</Typography>
-      <Typography>{rating ? rating.value : null}</Typography>
-      <Box>
-        {" "}
-        <Rating
-          variant="secondary"
-          value={rating ? parseInt(rating.value) : 0}
-          onChange={(event, newValue) => {
-            addRating(event, newValue);
-          }}
-        />
-        <button onClick={removeRating}>Remove Rating</button>
-        <textarea
-          onChange={(e) => {
-            setComment(e.target.value);
-          }}
-        />
-      </Box>
+      <Container
+        maxWidth="lg"
+        sx={{
+          my: "2rem",
+          justifyContent: "center",
+          display: "flex",
+          flexFlow: "column",
+          py: "4rem",
+        }}
+      >
+        {movie && movieElement}
+        <Box sx={{ my: "1rem" }}>
+          <Typography component="h4" variant="h5" sx={{ my: "0.2rem" }}>
+            Your review ( {rating && rating.value} )
+          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", my: "0.2rem" }}>
+            {" "}
+            <Rating
+              variant="secondary"
+              value={rating ? parseInt(rating.value) : 0}
+              onChange={(event, newValue) => {
+                addRating(event, newValue);
+              }}
+            />{" "}
+            <CancelIcon
+              sx={{
+                cursor: "pointer",
+                mx: "0.2em",
+              }}
+              onClick={removeRating}
+            />
+          </Box>
+        </Box>
 
-      <ul>
-        {" "}
-        {movie.notes
-          ? movie.notes.map((note) => {
-              return (
-                <div onClick={deleteNote.bind(null, note._id)}>
-                  <Typography>{note.comment}</Typography>
-                </div>
-              );
-            })
-          : null}
-      </ul>
-      <button onClick={addNote}>Submit</button>
+        <Box sx={{ display: "flex" }}>
+          <TextareaAutosize
+            onChange={(e) => {
+              setComment(e.target.value);
+            }}
+            placeholder="Comment..."
+            style={{
+              width: "50%",
+              maxWidth: "100%",
+              height: "8rem",
+              margin: "1rem 0rem 1rem 0rem",
+              borderRadius: "0.2rem",
+              fontFamily: "sans-serif",
+              fontSize: "14px",
+              fontColor: "#00151c",
+              padding: "0.5rem",
+            }}
+          ></TextareaAutosize>
+          <Box
+            sx={{
+              m: "1rem",
+              display: "flex",
+              flexFlow: "column",
+              justifyContent: "end",
+            }}
+          >
+            <Button variant="contained" color="secondary" onClick={addNote}>
+              Submit
+            </Button>
+          </Box>
+        </Box>
+
+        <Card sx={{ width: "20%" }}>
+          {" "}
+          {movie.notes
+            ? movie.notes.map((note) => {
+                return (
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      flexFlow: "row-reverse",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <CancelIcon
+                      sx={{
+                        cursor: "pointer",
+                        mx: "0.2em",
+                      }}
+                      onClick={deleteNote.bind(null, note._id)}
+                    />
+                    <Typography color="primary.main">{note.comment}</Typography>
+                  </CardContent>
+                );
+              })
+            : null}
+        </Card>
+      </Container>
     </React.Fragment>
   );
 };

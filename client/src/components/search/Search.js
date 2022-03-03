@@ -8,39 +8,7 @@ const Search = () => {
   const movies = useSelector((state) => state.movies.movies);
   const dispatch = useDispatch();
   const userToken = useSelector((state) => state.user.token);
-  const addFav = (movie) => {
-    dispatch(
-      thunkActions(
-        {
-          url: "http://localhost:8080/favorites",
-          method: "POST",
-          auth: true,
-          body: JSON.stringify({
-            name: movie.name,
-            movieId: movie.id,
-            genres: [...movie.genres],
-            image: movie.image && movie.image,
-          }),
-          addFav: true,
-        },
-        userToken
-      )
-    );
-  };
 
-  const removeFav = (movie) => {
-    dispatch(
-      thunkActions(
-        {
-          url: `http://localhost:8080/favorites/${movie.id}`,
-          method: "DELETE",
-          auth: true,
-          removeFav: true,
-        },
-        userToken
-      )
-    );
-  };
   const moviesElements =
     movies.length > 0 ? (
       movies.map((movie) => {
@@ -54,8 +22,6 @@ const Search = () => {
               url={movie.url}
               summary={movie.summary}
               runtime={movie.runtime}
-              addFav={addFav.bind(null, movie)}
-              removeFav={removeFav.bind(null, movie)}
               movieId={movie.id.toString()}
             />
           </ListItem>

@@ -15,6 +15,7 @@ const Favorites = (props) => {
               image={!fav.image ? Cross : fav.image}
               key={fav.id}
               name={fav.name}
+              id={fav.movieId}
             />
           );
         })

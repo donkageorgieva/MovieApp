@@ -25,6 +25,7 @@ const thunkActions = (config, token = "") => {
           );
         }
         if (config.search) {
+          console.log(data, "data search");
           dispatch(
             moviesActions.setMovies({
               movies: data.map((movie) => {
@@ -76,12 +77,14 @@ const thunkActions = (config, token = "") => {
           );
         }
         if (config.addNote) {
-          console.log(data, "data from note adding");
           dispatch(
             detailsActions.comment({
               movie: data.data,
             })
           );
+          if (config.fn) {
+            config.fn();
+          }
         }
         if (config.display) {
           dispatch(
@@ -108,6 +111,9 @@ const thunkActions = (config, token = "") => {
               notes: data,
             })
           );
+          if (config.fn) {
+            config.fn();
+          }
         }
         if (config.addRating) {
           dispatch(
@@ -120,6 +126,7 @@ const thunkActions = (config, token = "") => {
           }
         }
         if (config.fetchRating) {
+          console.log(data);
           dispatch(
             detailsActions.setRating({
               notes: data,

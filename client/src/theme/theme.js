@@ -37,6 +37,13 @@ theme.components = {
       },
     },
   },
+  MuiSvgIcon: {
+    styleOverrides: {
+      root: {
+        color: secondaryColor,
+      },
+    },
+  },
 };
 
 export default theme;

@@ -7,19 +7,57 @@ import {
   Button,
   Box,
 } from "@mui/material";
+import Cross from "../../../images/close.png";
+import thunkActions from "../../../store/movies/customThunk";
 import { Link } from "react-router-dom";
 import React from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import Cross from "../../../images/close.png";
+
 const Movie = (props) => {
   const genres = props.genres.join(", ");
   const favorites = useSelector((state) => state.favorites.favorites);
-  const movieLink = `/movies/${props.name}`;
+  const userToken = useSelector((state) => state.user.token);
+  const dispatch = useDispatch();
   const isFav = favorites.find((movie) => {
     if (movie !== undefined) {
       return movie.movieId.trim() === props.movieId.trim();
     }
   });
+
+  const addFav = (movie) => {
+    dispatch(
+      thunkActions(
+        {
+          url: "http://localhost:8080/favorites",
+          method: "POST",
+          auth: true,
+          body: JSON.stringify({
+            name: props.name,
+            movieId: props.movieId,
+            genres: [...props.genres],
+            image: props.image && props.image,
+          }),
+          addFav: true,
+        },
+        userToken
+      )
+    );
+  };
+
+  const removeFav = (movie) => {
+    dispatch(
+      thunkActions(
+        {
+          url: `http://localhost:8080/favorites/${props.movieId}`,
+          method: "DELETE",
+          auth: true,
+          removeFav: true,
+        },
+        userToken
+      )
+    );
+  };
   return (
     <React.Fragment>
       <Card
@@ -32,16 +70,24 @@ const Movie = (props) => {
         }}
         component="article"
       >
-        <Link to={movieLink}>
+        <Link to={`/movies/${props.name}`}>
           <CardMedia
             component="img"
-            sx={{ width: 151 }}
+            sx={{ width: "10rem", objectFit: "cover", height: "100%" }}
             image={props.image ? props.image : Cross}
             alt="Live from space album cover"
           />
         </Link>
-        <CardContent sx={{ backgroundColor: "primary.main" }}>
-          <Link to={movieLink} style={{ textDecoration: "none" }}>
+        <CardContent
+          sx={{
+            backgroundColor: "primary.main",
+            display: "flex",
+            flexFlow: "column",
+            justifyContent: "center",
+            height: "100%",
+          }}
+        >
+          <Link to={`/movies/${props.name}`} style={{ textDecoration: "none" }}>
             <Typography component="h4" variant="h5">
               {props.name} ({props.premiered})
             </Typography>
@@ -61,13 +107,14 @@ const Movie = (props) => {
             variant="body2"
             color="secondary.main"
           >
-            {props.url}
+            View official site
           </MUILink>
           <Box>
             <Button
               variant="outlined"
               color="info"
-              onClick={isFav ? props.removeFav : props.addFav}
+              onClick={isFav ? removeFav : addFav}
+              sx={{ my: "1rem" }}
             >
               {isFav ? "Remove From Favorites" : "Add to Favorites"}
             </Button>
