@@ -13,7 +13,7 @@ const Favorites = (props) => {
           return (
             <Favorite
               image={!fav.image ? Cross : fav.image}
-              key={fav.id}
+              key={fav.id + fav.image + fav.movieId}
               name={fav.name}
               id={fav.movieId}
             />
