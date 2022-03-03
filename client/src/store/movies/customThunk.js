@@ -109,10 +109,16 @@ const thunkActions = (config, token = "") => {
             })
           );
         }
-        if (config.addRating || config.fetchRating) {
-          console.log("config add rating thunk, fetch and put");
+        if (config.addRating) {
           dispatch(
             detailsActions.addRating({
+              notes: data,
+            })
+          );
+        }
+        if (config.fetchRating) {
+          dispatch(
+            detailsActions.setRating({
               notes: data,
             })
           );

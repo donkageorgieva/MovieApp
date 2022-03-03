@@ -111,7 +111,13 @@ const Details = (props) => {
       <Typography>{rating ? rating.value : null}</Typography>
       <Box>
         {" "}
-        <Rating variant="secondary" onChange={addRating} />
+        <Rating
+          variant="secondary"
+          value={rating ? parseInt(rating.value) : 0}
+          onChange={(event, newValue) => {
+            addRating(event, newValue);
+          }}
+        />
         <textarea
           onChange={(e) => {
             setComment(e.target.value);

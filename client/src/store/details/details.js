@@ -44,11 +44,22 @@ export const detailSlice = createSlice({
         };
       });
     },
-    addRating(state, actions) {
-      console.log("fired");
-      console.log(actions.payload, "rating ");
+    setRating(state, actions) {
+      // const value = parseInt(actions.payload.notes.data[0].value);
+      // state.rating = {
+      //   value,
+      //   movieId: actions.payload.notes.data[0].movieId,
+      // };
       state.rating = {
+        value: parseInt(actions.payload.notes.data[0].value),
         ...actions.payload.notes.data[0],
+      };
+    },
+    addRating(state, actions) {
+      console.log(actions.payload.notes.data.value, "add rating");
+      state.rating = {
+        value: parseInt(actions.payload.notes.data.value),
+        ...actions.payload.notes.data,
       };
     },
   },
