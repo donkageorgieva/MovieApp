@@ -103,13 +103,12 @@ exports.deleteOneFavorite = (req, res) => {
       Favorite.findOneAndDelete({ movieId: req.params.movieId }).then(
         (result) => {
           Note.deleteMany({ favoriteId: req.params.movieId });
-          console.log(result);
+
           user.deleteOneFavorite(result._id);
         }
       );
     })
     .then((result) => {
-      console.log(result);
       res.status(200).json({
         data: req.params.movieId,
       });

@@ -25,7 +25,7 @@ const UserSchema = new Schema({
       required: true,
     },
   ],
-  Ratings: [
+  notes: [
     {
       type: Schema.Types.ObjectId,
       ref: "Note",
@@ -66,15 +66,16 @@ UserSchema.methods.addFavorite = function (movie) {
 };
 
 UserSchema.methods.addNote = function (movie) {
-  const currRatings = [...this.Ratings];
+  const currNotes = [...this.notes];
   const note = new Note({
     comment: movie.comment,
     movieId: movie.movieId,
     userId: this._id,
   });
   note.save();
-  currRatings.push(note);
-  this.Ratings = currRatings;
+  currNotes.push(note);
+  this.notes = currNotes;
+
   this.save();
   return note._id;
 };
@@ -90,18 +91,18 @@ UserSchema.methods.deleteOneFavorite = function (movieId) {
   updatedFavorites = this.favorites.filter(
     (fav) => fav._id.toString().trim() !== movieId.toString().trim()
   );
-  console.log(updatedFavorites, "updatedFavs");
+
   this.favorites = updatedFavorites;
   return this.save();
 };
 UserSchema.methods.deleteOneNote = function (id) {
-  let updatedRatings = [...this.Ratings];
-  updatedRatings = this.Ratings.filter(
+  let updatedRatings = [...this.ratings];
+  updatedRatings = this.ratings.filter(
     (note) => note._id.toString().trim() !== id.toString().trim()
   );
-  this.Ratings = updatedRatings;
+  this.ratings = updatedRatings;
   this.save();
-  return this.Ratings;
+  return this.ratings;
 };
 
 UserSchema.methods.addRating = function (data) {
@@ -118,7 +119,7 @@ UserSchema.methods.addRating = function (data) {
           movieId: data.movieId,
           userId: this._id,
         });
-        console.log(rating, "rating");
+
         rating.save();
         currRatings.push(rating);
         this.ratings = currRatings;

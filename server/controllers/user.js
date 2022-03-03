@@ -35,6 +35,7 @@ exports.getNotes = (req, res) => {
     .then((user) => {
       user.populate("notes").then((populatedUserNotes) => {
         console.log(req.params.movieId, "params ");
+        console.log('notes, "POPULATED NOTES');
         res.status(200).json({
           data: populatedUserNotes.notes.filter((note) => {
             if (note.movieId.trim() === req.params.movieId.trim()) {
@@ -105,7 +106,6 @@ exports.getRating = (req, res) => {
   User.findById(req.userId)
     .then((user) => {
       user.populate("ratings").then((populatedUserRatings) => {
-        console.log(populatedUserRatings);
         res.status(200).json({
           data: populatedUserRatings.ratings.filter((rating) => {
             if (rating.movieId.trim() === req.params.movieId.trim()) {
