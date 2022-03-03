@@ -1,11 +1,7 @@
 import { Box, Typography, Button, Container } from "@mui/material";
 import { Link } from "react-router-dom";
 import headerImg from "../../../images/image.jpg";
-const styles = {
-  Box: {
-    backgroundImage: `url(${headerImg})`,
-  },
-};
+
 const Header = () => {
   return (
     <Box

@@ -25,7 +25,6 @@ const thunkActions = (config, token = "") => {
           );
         }
         if (config.search) {
-          console.log(data, "data search");
           dispatch(
             moviesActions.setMovies({
               movies: data.map((movie) => {
@@ -126,7 +125,6 @@ const thunkActions = (config, token = "") => {
           }
         }
         if (config.fetchRating) {
-          console.log(data);
           dispatch(
             detailsActions.setRating({
               notes: data,

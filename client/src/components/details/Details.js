@@ -13,7 +13,7 @@ import { Typography } from "@mui/material";
 import Movie from "../search/movie/Movie";
 import thunkActions from "../../store/movies/customThunk";
 import CancelIcon from "@mui/icons-material/Cancel";
-import { Button, TextField, Card } from "@mui/material";
+import { Button, Card } from "@mui/material";
 const Details = (props) => {
   const dispatch = useDispatch();
   const movie = useSelector((state) => state.details.movie);
@@ -56,7 +56,6 @@ const Details = (props) => {
     );
   };
   const addRating = (e, newVal) => {
-    console.log(e, newVal);
     dispatch(
       thunkActions(
         {

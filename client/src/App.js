@@ -17,7 +17,6 @@ function App() {
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
     if (!savedToken) {
-      console.log("no token");
       dispatch(
         thunkActions({
           url: "http://localhost:8080/auth/login",

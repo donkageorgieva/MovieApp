@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { TextField, Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 import SearchIcon from "@mui/icons-material/Search";
-import { moviesActions } from "../../../store/movies/movies";
 import customThunk from "../../../store/movies/customThunk";
 const SearchInput = (props) => {
   const [query, setQuery] = useState("");

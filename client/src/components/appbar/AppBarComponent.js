@@ -1,4 +1,4 @@
-import { AppBar, Box, Container, Typography } from "@mui/material";
+import { AppBar, Container, Typography } from "@mui/material";
 import SearchInput from "../UI/search-input/SearchInput";
 
 const AppBarComponent = (props) => {

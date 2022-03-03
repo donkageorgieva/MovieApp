@@ -26,7 +26,6 @@ export const favSlice = createSlice({
       state.favorites.push(actions.payload.favorite);
     },
     removeFavorite(state, actions) {
-      console.log(actions.payload.favorite, "favorite remove");
       const doesExist = state.favorites.find((fav) => {
         return fav.movieId.trim() === actions.payload.favorite.trim();
       });
@@ -40,7 +39,6 @@ export const favSlice = createSlice({
     setFavorites(state, actions) {
       const favorites = actions.payload.favorites;
       state.favorites = favorites;
-      console.log(favorites, "setting favs");
     },
   },
 });

@@ -18,7 +18,6 @@ export const detailSlice = createSlice({
   initialState,
   reducers: {
     display(state, actions) {
-      console.log(actions.payload.movie);
       state.movie = {
         ...actions.payload.movie,
       };
@@ -36,10 +35,8 @@ export const detailSlice = createSlice({
           };
         }
       });
-      console.log(actions.payload, "removing");
     },
     setNotes(state, actions) {
-      console.log(actions.payload, "payload notes");
       state.movie.notes = actions.payload.notes.data.map((note) => {
         return {
           ...note,
@@ -47,7 +44,6 @@ export const detailSlice = createSlice({
       });
     },
     setRating(state, actions) {
-      console.log("set", actions.payload);
       state.rating = {
         value: !actions.payload.notes.data[0]
           ? 0
@@ -56,7 +52,6 @@ export const detailSlice = createSlice({
       };
     },
     addRating(state, actions) {
-      console.log("add", actions.payload, "add data");
       state.rating = {
         value: !actions.payload.notes.data[0]
           ? 0

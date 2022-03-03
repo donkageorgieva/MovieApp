@@ -1,13 +1,10 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Container, Box, Typography, List, ListItem } from "@mui/material";
-import thunkActions from "../../store/movies/customThunk";
 import Movie from "./movie/Movie";
 import SearchInput from "../UI/search-input/SearchInput";
 
 const Search = () => {
   const movies = useSelector((state) => state.movies.movies);
-  const dispatch = useDispatch();
-  const userToken = useSelector((state) => state.user.token);
 
   const moviesElements =
     movies.length > 0 ? (
