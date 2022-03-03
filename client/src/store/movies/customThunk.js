@@ -115,6 +115,9 @@ const thunkActions = (config, token = "") => {
               notes: data,
             })
           );
+          if (config.fn) {
+            config.fn();
+          }
         }
         if (config.fetchRating) {
           dispatch(

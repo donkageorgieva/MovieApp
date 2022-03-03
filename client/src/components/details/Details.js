@@ -48,8 +48,8 @@ const Details = (props) => {
       )
     );
   };
-  const addRating = (e) => {
-    console.log(e.target.value, "value");
+  const addRating = (e, newVal) => {
+    console.log(e, newVal);
     dispatch(
       thunkActions(
         {
@@ -57,10 +57,55 @@ const Details = (props) => {
           method: "PUT",
           auth: true,
           body: JSON.stringify({
-            value: e.target.value,
+            value: parseInt(e.target.value),
             movieId: movie.id.toString().trim(),
           }),
           addRating: true,
+          fn: () => {
+            dispatch(
+              thunkActions(
+                {
+                  url: `http://localhost:8080/ratings/${movie.id}`,
+                  method: "GET",
+                  auth: true,
+
+                  fetchRating: true,
+                },
+                userToken
+              )
+            );
+          },
+        },
+        userToken
+      )
+    );
+  };
+  const removeRating = (e) => {
+    dispatch(
+      thunkActions(
+        {
+          url: `http://localhost:8080/ratings/${movie.id}`,
+          method: "DELETE",
+          auth: true,
+          body: JSON.stringify({
+            ratingId: rating._id,
+            movieId: movie.id.toString().trim(),
+          }),
+          addRating: true,
+          fn: () => {
+            dispatch(
+              thunkActions(
+                {
+                  url: `http://localhost:8080/ratings/${movie.id}`,
+                  method: "GET",
+                  auth: true,
+
+                  fetchRating: true,
+                },
+                userToken
+              )
+            );
+          },
         },
         userToken
       )
@@ -118,6 +163,7 @@ const Details = (props) => {
             addRating(event, newValue);
           }}
         />
+        <button onClick={removeRating}>Remove Rating</button>
         <textarea
           onChange={(e) => {
             setComment(e.target.value);

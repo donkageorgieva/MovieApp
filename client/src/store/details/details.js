@@ -45,21 +45,25 @@ export const detailSlice = createSlice({
       });
     },
     setRating(state, actions) {
-      // const value = parseInt(actions.payload.notes.data[0].value);
-      // state.rating = {
-      //   value,
-      //   movieId: actions.payload.notes.data[0].movieId,
-      // };
-      state.rating = {
-        value: parseInt(actions.payload.notes.data[0].value),
-        ...actions.payload.notes.data[0],
-      };
+      console.log("set");
+      if (actions.payload.notes.data.length > 0) {
+        state.rating = {
+          value: parseInt(actions.payload.notes.data[0].value),
+          ...actions.payload.notes.data[0],
+        };
+      } else {
+        state.rating = {
+          ...state.rating.movieId,
+          value: 0,
+          ...state.rating._id,
+        };
+      }
     },
     addRating(state, actions) {
-      console.log(actions.payload.notes.data.value, "add rating");
+      console.log("add", actions.payload.notes.data[0]);
+
       state.rating = {
-        value: parseInt(actions.payload.notes.data.value),
-        ...actions.payload.notes.data,
+        ...actions.payload.notes.data[0],
       };
     },
   },
