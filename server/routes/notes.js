@@ -9,7 +9,6 @@ router.post(
   userController.addNote
 );
 router.get("/:movieId", userController.getNotes);
-
 router.delete("/:movieId", userController.deleteNote);
 
 module.exports = router;

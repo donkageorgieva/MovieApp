@@ -4,7 +4,7 @@ const initialState = {
   movie: {
     name: "",
     movieId: "",
-    notes: [],
+    notes: [{ _id: "", comment: "", movieId: "" }],
     rating: 0,
   },
 };
@@ -23,8 +23,15 @@ export const detailSlice = createSlice({
         ...actions.payload.movie,
       });
     },
-    removeNote(state, actions) {
-      console.log(actions.payload);
+    deleteNote(state, actions) {
+      state.movie.notes = state.movie.notes.filter((note) => {
+        if (note._id.trim() !== actions.payload.note._id.trim()) {
+          return {
+            ...note,
+          };
+        }
+      });
+      console.log(actions.payload, "removing");
     },
     setNotes(state, actions) {
       console.log(actions.payload.notes, "NOTES payload");

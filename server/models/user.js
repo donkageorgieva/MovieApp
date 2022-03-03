@@ -104,7 +104,8 @@ UserSchema.methods.deleteOneNote = function (id) {
   );
   console.log(updatedNotes, "updatedNotes");
   this.notes = updatedNotes;
-  return this.save();
+  this.save();
+  return this.notes;
 };
 const User = mongoose.model("User", UserSchema);
 module.exports = User;

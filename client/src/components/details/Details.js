@@ -31,6 +31,7 @@ const Details = (props) => {
     );
   };
   const deleteNote = (id) => {
+    console.log("delete note", id, movie.id);
     dispatch(
       thunkActions(
         {
@@ -38,7 +39,7 @@ const Details = (props) => {
           method: "DELETE",
           auth: true,
           body: JSON.stringify({
-            id,
+            id: id,
           }),
           deleteNote: true,
         },
@@ -84,13 +85,9 @@ const Details = (props) => {
         {movie.notes
           ? movie.notes.map((note) => {
               return (
-                <Typography
-                  onClick={() => {
-                    deleteNote(note._id);
-                  }}
-                >
-                  {note.comment}
-                </Typography>
+                <div onClick={deleteNote.bind(null, note._id)}>
+                  <Typography>{note.comment}</Typography>
+                </div>
               );
             })
           : null}

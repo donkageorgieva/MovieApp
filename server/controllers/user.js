@@ -60,6 +60,9 @@ exports.deleteNote = (req, res) => {
     }
     Note.findOneAndDelete({ _id: mongoose.Types.ObjectId(req.body.id) }).then(
       (result) => {
+        res.status(200).json({
+          data: result,
+        });
         user.deleteOneNote(req.body.id);
       }
     );

@@ -17,6 +17,13 @@ const thunkActions = (config, token = "") => {
         return response.json();
       })
       .then((data) => {
+        if (config.deleteNote) {
+          dispatch(
+            detailsActions.deleteNote({
+              note: data.data,
+            })
+          );
+        }
         if (config.search) {
           dispatch(
             moviesActions.setMovies({
@@ -102,15 +109,6 @@ const thunkActions = (config, token = "") => {
             })
           );
         }
-        if (config.deleteNote) {
-          console.log("deleting", data);
-          dispatch(
-            detailsActions.removeNote({
-              notes: data,
-            })
-          );
-        }
-        console.log(config, "config");
       })
       .catch((err) => {
         throw err;
