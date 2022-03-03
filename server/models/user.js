@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const Favorite = require("./favorite");
 const Note = require("./notes");
+const Rating = require("./rating");
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
@@ -33,13 +34,9 @@ const UserSchema = new Schema({
   ],
   ratings: [
     {
-      type: Number,
-      min: 0,
-      max: 5,
-      movieId: {
-        type: "String",
-        required: true,
-      },
+      type: Schema.Types.ObjectId,
+      ref: "Rating",
+      required: true,
     },
   ],
 });
@@ -102,10 +99,40 @@ UserSchema.methods.deleteOneNote = function (id) {
   updatedNotes = this.notes.filter(
     (note) => note._id.toString().trim() !== id.toString().trim()
   );
-  console.log(updatedNotes, "updatedNotes");
   this.notes = updatedNotes;
   this.save();
   return this.notes;
 };
+
+UserSchema.methods.addRating = function (data) {
+  const currRatings = [...this.ratings];
+  Rating.findOne({ movieId: data.movieId.trim() })
+    .then((foundRating) => {
+      if (foundRating) {
+        foundRating.changeValue({
+          value: data.value,
+        });
+      } else {
+        const rating = new Rating({
+          value: data.value,
+          movieId: data.movieId,
+          userId: this._id,
+        });
+        console.log(rating, "rating");
+        rating.save();
+        currRatings.push(rating);
+        this.ratings = currRatings;
+        return this.save();
+      }
+    })
+    .then((result) => {})
+    .catch((err) => {
+      if (!err.statusCode) {
+        err.statusCode = 500;
+      }
+      throw err;
+    });
+};
+
 const User = mongoose.model("User", UserSchema);
 module.exports = User;

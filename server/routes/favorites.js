@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const favoritesController = require("../controllers/favorites");
 const { body } = require("express-validator");
-
 router.get("/favorites/:movieId", favoritesController.getOneFavorite);
 router.get("/favorites", favoritesController.getFavorites);
 router.post(
@@ -26,10 +25,5 @@ router.post(
   favoritesController.addFavorite
 );
 router.delete("/favorites/:movieId", favoritesController.deleteOneFavorite);
-router.put(
-  "/ratings/:movieId",
-  [body("rating").exists().isNumeric({ min: 0, max: 5 })],
-  favoritesController.modifyRating
-);
-router.get("/ratings/:movieId", favoritesController.getRatings);
+
 module.exports = router;
