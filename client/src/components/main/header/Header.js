@@ -20,11 +20,11 @@ const Header = () => {
     >
       <Container maxWidth="lg">
         <Typography variant="h2" component="h1">
-          Heading
+          Have fun
         </Typography>
         <Typography variant="body1" component="p">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
+          Browse for your favorite movies, write down private notes and don't
+          forget to come back!
         </Typography>
         <Link to="/search" style={{ textDecoration: "none" }}>
           <Button variant="contained" color="secondary" sx={{ my: "1rem" }}>
