@@ -5,7 +5,11 @@ const initialState = {
     name: "",
     movieId: "",
     notes: [{ _id: "", comment: "", movieId: "" }],
-    rating: 0,
+    rating: {
+      movieId: "",
+      value: 0,
+      _id: "",
+    },
   },
 };
 
@@ -34,13 +38,18 @@ export const detailSlice = createSlice({
       console.log(actions.payload, "removing");
     },
     setNotes(state, actions) {
-      console.log(actions.payload.notes, "NOTES payload");
-      // state.movie.notes = actions.payload.notes;
       state.movie.notes = actions.payload.notes.data.map((note) => {
         return {
           ...note,
         };
       });
+    },
+    addRating(state, actions) {
+      console.log("fired");
+      console.log(actions.payload, "rating ");
+      state.rating = {
+        ...actions.payload.notes.data[0],
+      };
     },
   },
 });

@@ -1,16 +1,18 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { useCallback } from "react";
 import { useState } from "react";
-import Movie from "../search/movie/Movie";
-import thunkActions from "../../store/movies/customThunk";
+import { Rating, Box } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { Typography } from "@mui/material";
+import Movie from "../search/movie/Movie";
+import thunkActions from "../../store/movies/customThunk";
+
 const Details = (props) => {
   const dispatch = useDispatch();
   const movie = useSelector((state) => state.details.movie);
   const userToken = useSelector((state) => state.user.token);
-  const notes = useSelector((state) => state.details.notes);
+  const rating = useSelector((state) => state.details.rating);
+
   const params = useParams();
   const [comment, setComment] = useState("");
 
@@ -31,7 +33,6 @@ const Details = (props) => {
     );
   };
   const deleteNote = (id) => {
-    console.log("delete note", id, movie.id);
     dispatch(
       thunkActions(
         {
@@ -42,6 +43,24 @@ const Details = (props) => {
             id: id,
           }),
           deleteNote: true,
+        },
+        userToken
+      )
+    );
+  };
+  const addRating = (e) => {
+    console.log(e.target.value, "value");
+    dispatch(
+      thunkActions(
+        {
+          url: `http://localhost:8080/ratings/${movie.id}`,
+          method: "PUT",
+          auth: true,
+          body: JSON.stringify({
+            value: e.target.value,
+            movieId: movie.id.toString().trim(),
+          }),
+          addRating: true,
         },
         userToken
       )
@@ -58,28 +77,48 @@ const Details = (props) => {
     }
   }, [dispatch, params.title, userToken]);
   useEffect(() => {
-    dispatch(
-      thunkActions(
-        {
-          url: `http://localhost:8080/notes/${movie.id}`,
-          method: "GET",
-          auth: true,
-          getNotes: true,
-        },
-        userToken
-      )
-    );
+    if (movie.id) {
+      dispatch(
+        thunkActions(
+          {
+            url: `http://localhost:8080/notes/${movie.id}`,
+            method: "GET",
+            auth: true,
+            getNotes: true,
+          },
+          userToken
+        )
+      );
+      dispatch(
+        thunkActions(
+          {
+            url: `http://localhost:8080/ratings/${movie.id}`,
+            method: "GET",
+            auth: true,
+
+            fetchRating: true,
+          },
+          userToken
+        )
+      );
+    }
   }, [movie.id, dispatch, userToken]);
 
   return (
     <React.Fragment>
       <Typography>{movie ? movie.name : null}</Typography>
+      <Typography>Your review</Typography>
+      <Typography>{rating ? rating.value : null}</Typography>
+      <Box>
+        {" "}
+        <Rating variant="secondary" onChange={addRating} />
+        <textarea
+          onChange={(e) => {
+            setComment(e.target.value);
+          }}
+        />
+      </Box>
 
-      <textarea
-        onChange={(e) => {
-          setComment(e.target.value);
-        }}
-      />
       <ul>
         {" "}
         {movie.notes

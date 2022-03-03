@@ -98,13 +98,21 @@ const thunkActions = (config, token = "") => {
               },
             })
           );
-          if (config.fn()) {
+          if (config.fn) {
             config.fn();
           }
         }
         if (config.getNotes) {
           dispatch(
             detailsActions.setNotes({
+              notes: data,
+            })
+          );
+        }
+        if (config.addRating || config.fetchRating) {
+          console.log("config add rating thunk, fetch and put");
+          dispatch(
+            detailsActions.addRating({
               notes: data,
             })
           );
