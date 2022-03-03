@@ -1,0 +1,150 @@
+post http://localhost:8080/favorites
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MjFhMjE3ZjFlMDI3YTFkZGUxNjViNGIiLCJpYXQiOjE2NDU5NTQ0MTIsImV4cCI6MTY0ODU0NjQxMn0.ajavzU12pv1U0RTuYsUfiWK1VH83NGYqiiY0TXJwraI
+
+{
+  
+    "userId": "621a217f1e027a1dde165b4a",
+  "movieName": "Funnny Movie",
+  "movieId": "15",
+  "genres":["Thriller", "Drama"]
+}
+###
+post http://localhost:8080/notes
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MjFhMjE3ZjFlMDI3YTFkZGUxNjViNGIiLCJpYXQiOjE2NDU5NTQ0MTIsImV4cCI6MTY0ODU0NjQxMn0.ajavzU12pv1U0RTuYsUfiWK1VH83NGYqiiY0TXJwraI
+
+{
+  
+    "userId": "621a217f1e027a1dde165b4a",
+ 
+  "movieId": "1",
+ "comment": "Nice movie"
+}
+###
+delete http://localhost:8080/favorites/3358
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjFjODNhMmViNGM5Yzg5NWNlNzU5MWQiLCJpYXQiOjE2NDYyMDc0NTIsImV4cCI6MTY0ODc5OTQ1Mn0.DYsAJ2UsbBoF_k58mKwEFi__hsdTbNusOlxooqVfTMI
+
+{
+  
+    "userId": "621a217f1e027a1dde165b4a",
+  "movieId": "666"
+
+}
+###
+
+get http://localhost:8080/favorites
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MjFhMjE3ZjFlMDI3YTFkZGUxNjViNGIiLCJpYXQiOjE2NDU5NTQ0MTIsImV4cCI6MTY0ODU0NjQxMn0.ajavzU12pv1U0RTuYsUfiWK1VH83NGYqiiY0TXJwraI
+
+
+###
+get http://localhost:8080/favorites/0
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50SWQiOiI2MjFhMjE3ZjFlMDI3YTFkZGUxNjViNGIiLCJpYXQiOjE2NDU5NTQ0MTIsImV4cCI6MTY0ODU0NjQxMn0.ajavzU12pv1U0RTuYsUfiWK1VH83NGYqiiY0TXJwraI
+
+
+###
+
+post http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+
+    "username" : "user",
+    "password": "Pa55w.rd",
+    "demo":true
+
+}
+
+###
+post http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+"username": "user2",
+"userId": "621c8aa73a47b4d19d5307e8",
+"password": "1234567890"
+
+}
+
+###
+get http://localhost:8080/favorites
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjFjODNhMmViNGM5Yzg5NWNlNzU5MWQiLCJpYXQiOjE2NDYwMzc1NDIsImV4cCI6MTY0ODYyOTU0Mn0.8zXklGjQwH4tm5AhXUMC2bFjO_Mc8GXz57lDAPNuvdk
+
+###
+
+get http://localhost:8080/favorites
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjFjOGFhNzNhNDdiNGQxOWQ1MzA3ZTgiLCJpYXQiOjE2NDYwMzc3MTMsImV4cCI6MTY0ODYyOTcxM30.9zYiz1aySrFhCkc73eudfFIDtXb6t85oIFUXDrr7vIc
+
+###
+post http://localhost:8080/favorites
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjFjODNhMmViNGM5Yzg5NWNlNzU5MWQiLCJpYXQiOjE2NDYyMDU4MzcsImV4cCI6MTY0ODc5NzgzN30.bn2iOr1dXU4G2X9ffH99PjeuOE_fwHLj0W4iqvRc96Q
+
+{
+  
+ 
+  "name": "3",
+  "movieId": "4",
+  "genres":["Thriller", "Drama", "kids"]
+}
+
+###
+
+
+get http://localhost:8080/favorites/
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjFjOGFhNzNhNDdiNGQxOWQ1MzA3ZTgiLCJpYXQiOjE2NDYwMzc3MTMsImV4cCI6MTY0ODYyOTcxM30.9zYiz1aySrFhCkc73eudfFIDtXb6t85oIFUXDrr7vIc
+
+###
+delete http://localhost:8080/favorites/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjFjOGFhNzNhNDdiNGQxOWQ1MzA3ZTgiLCJpYXQiOjE2NDYwMzc3MTMsImV4cCI6MTY0ODYyOTcxM30.9zYiz1aySrFhCkc73eudfFIDtXb6t85oIFUXDrr7vIc
+
+
+###
+post http://localhost:8080/notes/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjFjOGFhNzNhNDdiNGQxOWQ1MzA3ZTgiLCJpYXQiOjE2NDYwMzc3MTMsImV4cCI6MTY0ODYyOTcxM30.9zYiz1aySrFhCkc73eudfFIDtXb6t85oIFUXDrr7vIc
+
+{
+  
+ 
+  "comment": "",
+  
+  
+
+}
+
+###
+get http://localhost:8080/notes/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjFjOGFhNzNhNDdiNGQxOWQ1MzA3ZTgiLCJpYXQiOjE2NDYwMzc3MTMsImV4cCI6MTY0ODYyOTcxM30.9zYiz1aySrFhCkc73eudfFIDtXb6t85oIFUXDrr7vIc
+
+###
+
+get http://localhost:8080/notes/2
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjFjOGFhNzNhNDdiNGQxOWQ1MzA3ZTgiLCJpYXQiOjE2NDYwMzc3MTMsImV4cCI6MTY0ODYyOTcxM30.9zYiz1aySrFhCkc73eudfFIDtXb6t85oIFUXDrr7vIc
+
+###
+
+put http://localhost:8080/ratings/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjFjOGFhNzNhNDdiNGQxOWQ1MzA3ZTgiLCJpYXQiOjE2NDYwMzc3MTMsImV4cCI6MTY0ODYyOTcxM30.9zYiz1aySrFhCkc73eudfFIDtXb6t85oIFUXDrr7vIc
+
+{
+  "amount": 3
+
+
+}
+###
+get http://localhost:8080/ratings/3
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MjFjOGFhNzNhNDdiNGQxOWQ1MzA3ZTgiLCJpYXQiOjE2NDYwMzc3MTMsImV4cCI6MTY0ODYyOTcxM30.9zYiz1aySrFhCkc73eudfFIDtXb6t85oIFUXDrr7vIc
+
+###
